@@ -4,7 +4,7 @@
   "description": "Este projeto contém um CRUD feito com graphql e typescript.",
   "main": "index.js",
   "scripts": {
-    "start": "tsnd --transpile-only --ignore-watch node_modules src/index.ts"
+    "dev": "tsnd --transpile-only --ignore-watch node_modules src/index.ts"
   },
   "keywords": [],
   "author": "walefy",
