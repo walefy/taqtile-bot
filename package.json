@@ -12,7 +12,7 @@
   "author": "walefy",
   "license": "ISC",
   "dependencies": {
-    "@prisma/client": "^5.20.0",
+    "@prisma/client": "5.20.0",
     "apollo-server": "3.13.0",
     "graphql": "16.9.0"
   },
