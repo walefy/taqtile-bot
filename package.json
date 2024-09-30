@@ -10,11 +10,11 @@
   "author": "walefy",
   "license": "ISC",
   "dependencies": {
-    "apollo-server": "^3.13.0",
-    "graphql": "^16.9.0"
+    "apollo-server": "3.13.0",
+    "graphql": "16.9.0"
   },
   "devDependencies": {
-    "ts-node-dev": "^2.0.0",
-    "typescript": "^5.6.2"
+    "ts-node-dev": "2.0.0",
+    "typescript": "5.6.2"
   }
 }
