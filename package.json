@@ -4,9 +4,13 @@
   "description": "Este projeto contém um CRUD feito com graphql e typescript.",
   "main": "index.js",
   "scripts": {
+<<<<<<< HEAD
     "dev": "tsnd --transpile-only --ignore-watch node_modules src/index.ts",
     "lint": "eslint .",
     "lint:fix": "eslint . --fix"
+=======
+    "dev": "tsnd --transpile-only --ignore-watch node_modules src/index.ts"
+>>>>>>> 922ccb4 (chore: change script start to dev)
   },
   "keywords": [],
   "author": "walefy",
