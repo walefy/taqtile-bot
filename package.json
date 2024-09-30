@@ -4,25 +4,9 @@
   "description": "Este projeto contém um CRUD feito com graphql e typescript.",
   "main": "index.js",
   "scripts": {
-<<<<<<< HEAD
-<<<<<<< HEAD
-<<<<<<< HEAD
     "dev": "tsnd --transpile-only --ignore-watch node_modules src/index.ts",
     "lint": "eslint .",
     "lint:fix": "eslint . --fix"
-=======
-    "dev": "tsnd --transpile-only --ignore-watch node_modules src/index.ts"
->>>>>>> 922ccb4 (chore: change script start to dev)
-=======
-    "dev": "tsnd --transpile-only --ignore-watch node_modules src/index.ts",
-    "lint": "eslint .",
-    "lint:fix": "eslint . --fix"
->>>>>>> affbb39 (chore: add eslint and prettier for code formatting)
-=======
-    "dev": "tsnd --transpile-only --ignore-watch node_modules src/index.ts",
-    "lint": "eslint .",
-    "lint:fix": "eslint . --fix"
->>>>>>> e129ef9fab84a2e025b7bb16c873259e39df2b0a
   },
   "keywords": [],
   "author": "walefy",
@@ -32,10 +16,6 @@
     "graphql": "16.9.0"
   },
   "devDependencies": {
-<<<<<<< HEAD
-<<<<<<< HEAD
-=======
->>>>>>> e129ef9fab84a2e025b7bb16c873259e39df2b0a
     "@eslint/js": "9.11.1",
     "eslint": "9.11.1",
     "eslint-config-prettier": "9.1.0",
@@ -46,20 +26,5 @@
     "ts-node-dev": "2.0.0",
     "typescript": "5.4",
     "typescript-eslint": "8.7.0"
-<<<<<<< HEAD
-=======
-    "@eslint/js": "^9.11.1",
-    "eslint": "^9.11.1",
-    "eslint-config-prettier": "^9.1.0",
-    "eslint-plugin-prettier": "^5.2.1",
-    "eslint-plugin-unicorn": "^55.0.0",
-    "globals": "^15.9.0",
-    "prettier": "3.3.3",
-    "ts-node-dev": "^2.0.0",
-    "typescript": "5.4",
-    "typescript-eslint": "^8.7.0"
->>>>>>> affbb39 (chore: add eslint and prettier for code formatting)
-=======
->>>>>>> e129ef9fab84a2e025b7bb16c873259e39df2b0a
   }
 }
