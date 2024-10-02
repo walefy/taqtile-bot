@@ -7,6 +7,7 @@ import { UserResolver } from './resolvers/user-resolver';
 async function main() {
   const schema = await buildSchema({
     resolvers: [HelloWorldResolver, UserResolver],
+    validate: true,
   });
 
   const server = new ApolloServer({
