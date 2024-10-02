@@ -1,20 +1,21 @@
-import { ApolloServer, gql } from 'apollo-server';
+import 'reflect-metadata';
+import { ApolloServer } from 'apollo-server';
+import { buildSchema } from 'type-graphql';
+import { HelloWorldResolver } from './resolvers/hello-world-resolver';
+import { UserResolver } from './resolvers/user-resolver';
 
-const typeDefs = gql`
-  type Query {
-    helloWorld: String!
-  }
-`;
+async function main() {
+  const schema = await buildSchema({
+    resolvers: [HelloWorldResolver, UserResolver],
+  });
 
-const server = new ApolloServer({
-  typeDefs,
-  resolvers: {
-    Query: {
-      helloWorld: () => 'Hello world!',
-    },
-  },
-});
+  const server = new ApolloServer({
+    schema,
+  });
 
-server.listen().then(({ url }) => {
+  const { url } = await server.listen();
+
   console.log(`Server ready at ${url}`);
-});
+}
+
+main();
