@@ -1,0 +1,15 @@
+{
+  "extension": [
+    "ts"
+  ],
+  "require": [
+    "ts-node/register",
+    "chai/register-expect.js"
+  ],
+  "watch-files": [
+    "tests/**/*.ts"
+  ],
+  "spec": [
+    "tests/**/*.test.ts"
+  ]
+}
