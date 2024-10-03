@@ -2,11 +2,12 @@ import { Arg, Mutation, Resolver } from 'type-graphql';
 import { UserModel } from '../dtos/models/user-model';
 import { UserInput } from '../dtos/inputs/user-input';
 import { UserService } from '../services/user-service';
+import { Service } from 'typedi';
 
+@Service()
 @Resolver()
 export class UserResolver {
-  // TODO: inverter a dependência
-  constructor(private readonly userService: UserService = new UserService()) {}
+  constructor(private readonly userService: UserService) {}
 
   @Mutation(() => UserModel)
   async createUser(@Arg('data') data: UserInput) {
