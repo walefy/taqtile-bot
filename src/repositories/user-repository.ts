@@ -5,8 +5,9 @@ import { UserModel } from '../dtos/models/user-model';
 
 @Service()
 export class UserRepository {
-  private readonly prismaClient = new PrismaClient();
   private readonly model = this.prismaClient.user;
+
+  constructor(private readonly prismaClient: PrismaClient) {}
 
   async create(data: UserInput): Promise<UserModel> {
     return this.model.create({ data });
