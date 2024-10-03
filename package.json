@@ -7,7 +7,7 @@
     "dev": "tsnd --transpile-only --ignore-watch node_modules src/index.ts",
     "lint": "eslint .",
     "lint:fix": "eslint . --fix",
-    "test": "mocha"
+    "test": "env $(cat .env.test) mocha"
   },
   "keywords": [],
   "author": "walefy",
@@ -27,6 +27,7 @@
     "@swc/register": "0.1.10",
     "@types/chai": "5.0.0",
     "@types/mocha": "10.0.8",
+    "axios": "1.7.7",
     "chai": "4.4.1",
     "eslint": "9.11.1",
     "eslint-config-prettier": "9.1.0",
