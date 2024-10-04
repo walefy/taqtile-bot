@@ -10,5 +10,6 @@
     "skipLibCheck": true,
     "strictPropertyInitialization": false,
   },
-  "include": ["tests/**/*.ts", "src/**/*.ts"]
+  "include": ["src/**/*"],
+  "exclude": ["src/tests/**/*"]
 }
