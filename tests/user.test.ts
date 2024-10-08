@@ -43,14 +43,14 @@ describe('User suite', () => {
 
     expect(user).to.be.not.equal(null);
 
-    expect(user?.name).to.be.equal('test');
-    expect(user?.email).to.be.equal('test@test.com');
-    expect(user?.birthDate).to.be.eql(new Date('2024-10-02T18:17:49.314Z'));
+    expect(user?.name).to.be.equal(userPayload.name);
+    expect(user?.email).to.be.equal(userPayload.email);
+    expect(user?.birthDate.toISOString()).to.be.equal(userPayload.birthDate);
     expect(user?.id).to.be.equal(response.data.data.createUser.id);
-    expect(PasswordService.verifyPassword('test12', user?.password as string)).to.be.equal(true);
+    expect(PasswordService.verifyPassword(userPayload.password, user?.password as string)).to.be.equal(true);
 
-    expect(response.data.data.createUser.name).to.be.equal('test');
-    expect(response.data.data.createUser.email).to.be.equal('test@test.com');
-    expect(response.data.data.createUser.birthDate).to.be.equal('2024-10-02T18:17:49.314Z');
+    expect(response.data.data.createUser.name).to.be.equal(userPayload.name);
+    expect(response.data.data.createUser.email).to.be.equal(userPayload.email);
+    expect(response.data.data.createUser.birthDate).to.be.equal(userPayload.birthDate);
   });
 });
