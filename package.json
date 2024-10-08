@@ -4,9 +4,12 @@
   "description": "Este projeto contém um CRUD feito com graphql e typescript.",
   "main": "index.js",
   "scripts": {
+    "predev": "npx prisma migrate deploy",
     "dev": "tsnd --transpile-only --ignore-watch node_modules src/index.ts",
     "lint": "eslint .",
-    "lint:fix": "eslint . --fix"
+    "lint:fix": "eslint . --fix",
+    "pretest": "dotenv -e .env.test -- npx prisma migrate deploy",
+    "test": "dotenv -e .env.test -- mocha"
   },
   "keywords": [],
   "author": "walefy",
@@ -23,13 +26,20 @@
   },
   "devDependencies": {
     "@eslint/js": "9.11.1",
+    "@types/chai": "5.0.0",
+    "@types/mocha": "10.0.8",
+    "axios": "1.7.7",
+    "chai": "4.4.1",
+    "dotenv-cli": "7.4.2",
     "eslint": "9.11.1",
     "eslint-config-prettier": "9.1.0",
     "eslint-plugin-prettier": "5.2.1",
     "eslint-plugin-unicorn": "55.0.0",
     "globals": "15.9.0",
+    "mocha": "10.7.3",
     "prettier": "3.3.3",
     "prisma": "5.20.0",
+    "ts-node": "10.9.2",
     "ts-node-dev": "2.0.0",
     "typescript": "5.4",
     "typescript-eslint": "8.7.0"
