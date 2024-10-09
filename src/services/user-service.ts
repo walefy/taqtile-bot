@@ -42,10 +42,7 @@ export class UserService {
       throw new LoginUnauthorizedException();
     }
 
-    const userWithoutPassword = { ...user } as Partial<UserModel>;
-    delete userWithoutPassword.password;
-
-    const token = this.tokenService.generateToken(user.email, userWithoutPassword);
+    const token = this.tokenService.generateToken(user.email, { id: user.id });
 
     return { user, token };
   }
