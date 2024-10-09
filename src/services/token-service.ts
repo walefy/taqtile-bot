@@ -14,8 +14,9 @@ export class TokenService {
     this.secret = process.env.JWT_SECRET;
   }
 
-  public generateToken(subject: string, payload: Record<string, unknown>) {
-    return jwt.sign(payload, this.secret, { subject, expiresIn: '1d' });
+  public generateToken(subject: string, payload: Record<string, unknown>, rememberMe = false) {
+    const expiresIn = rememberMe ? '7d' : '1d';
+    return jwt.sign(payload, this.secret, { subject, expiresIn });
   }
 
   public verifyToken(token: string) {

@@ -42,7 +42,7 @@ export class UserService {
       throw new LoginUnauthorizedException();
     }
 
-    const token = this.tokenService.generateToken(user.email, { id: user.id });
+    const token = this.tokenService.generateToken(user.email, { id: user.id }, data.rememberMe);
 
     return { user, token };
   }

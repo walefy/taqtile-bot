@@ -3,6 +3,8 @@ import { expect } from 'chai';
 import { PasswordService } from '../src/services/password-service';
 import { prisma } from './test-setup';
 import { UserHelper } from './helpers/user-helper';
+import { TokenService } from '../src/services/token-service';
+import { TokenHelper } from './helpers/token-helper';
 
 describe('User suite', () => {
   const defaultUser = {
@@ -90,5 +92,28 @@ describe('User suite', () => {
     expect(response).to.have.length(1);
     expect(response[0]).to.have.property('message');
     expect(response[0].message).to.be.equal('Login unauthorized!');
+  });
+
+  it('Test if login mutation can login an user with rememberMe', async () => {
+    await UserHelper.createUser(defaultUser);
+    const loginPayload = { email: defaultUser.email, password: defaultUser.password, rememberMe: true };
+    const { data: response } = await UserHelper.login(loginPayload);
+
+    expect(response).to.have.property('user');
+    expect(response).to.have.property('token');
+
+    expect(response.user).to.have.property('id');
+    expect(response.user).to.have.property('name');
+    expect(response.user).to.have.property('email');
+    expect(response.user).to.have.property('birthDate');
+
+    expect(response.user.name).to.be.equal(defaultUser.name);
+    expect(response.user.email).to.be.equal(defaultUser.email);
+    expect(response.user.birthDate).to.be.equal(defaultUser.birthDate);
+
+    const tokenService = new TokenService();
+    const payload = tokenService.verifyToken(response.token) as { exp: number };
+
+    expect(TokenHelper.tokenExpirationInDays(payload.exp)).to.be.equal(7);
   });
 });
