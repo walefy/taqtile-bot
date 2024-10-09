@@ -16,7 +16,7 @@ describe('User suite', () => {
       password: 'test12',
       birthDate: '2024-10-02T18:17:49.314Z',
     };
-    const { data: response } = await UserHelper.createUser(userPayload);
+    const { data: response } = await UserHelper.createUserWithApiCall(userPayload);
 
     expect(response).to.have.property('id');
     expect(response).to.have.property('name');
@@ -45,8 +45,8 @@ describe('User suite', () => {
       password: 'test12',
       birthDate: '2024-10-02T18:17:49.314Z',
     };
-    await UserHelper.createUser(userPayload);
-    const { errors: response } = await UserHelper.createUser(userPayload);
+    await UserHelper.createUserWithDbCall(userPayload);
+    const { errors: response } = await UserHelper.createUserWithApiCall(userPayload);
 
     expect(response).to.be.not.equal(null);
     expect(response).to.be.an('array');
