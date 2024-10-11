@@ -28,4 +28,29 @@ export class UserHelper {
   static async createUserWithDbCall(data: Prisma.UserCreateInput) {
     return prisma.user.create({ data });
   }
+
+  static async login(data: Record<string, unknown>) {
+    const response = await axios({
+      url: 'http://localhost:4000',
+      method: 'post',
+      data: {
+        query: `
+          mutation Login($data: LoginInput!) {
+            login(data: $data) {
+              user {
+                id
+                name
+                email
+                birthDate
+              }
+              token
+            }
+          }
+        `,
+        variables: { data },
+      },
+    });
+
+    return { data: response.data.data?.login, errors: response.data.errors };
+  }
 }

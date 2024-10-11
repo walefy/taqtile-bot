@@ -5,18 +5,19 @@ import { prisma } from './test-setup';
 import { UserHelper } from './helpers/user-helper';
 
 describe('User suite', () => {
+  const defaultUser = {
+    email: 'test@test.com',
+    name: 'test',
+    password: 'test12',
+    birthDate: '2024-10-02T18:17:49.314Z',
+  };
+
   beforeEach(async () => {
     await prisma.user.deleteMany();
   });
 
   it('Test if createUser mutation can create an user', async () => {
-    const userPayload = {
-      email: 'test@test.com',
-      name: 'test',
-      password: 'test12',
-      birthDate: '2024-10-02T18:17:49.314Z',
-    };
-    const { data: response } = await UserHelper.createUserWithApiCall(userPayload);
+    const { data: response } = await UserHelper.createUserWithApiCall(defaultUser);
 
     expect(response).to.have.property('id');
     expect(response).to.have.property('name');
@@ -27,31 +28,67 @@ describe('User suite', () => {
 
     expect(user).to.be.not.equal(null);
 
-    expect(user?.name).to.be.equal(userPayload.name);
-    expect(user?.email).to.be.equal(userPayload.email);
-    expect(user?.birthDate.toISOString()).to.be.equal(userPayload.birthDate);
+    expect(user?.name).to.be.equal(defaultUser.name);
+    expect(user?.email).to.be.equal(defaultUser.email);
+    expect(user?.birthDate.toISOString()).to.be.equal(defaultUser.birthDate);
     expect(user?.id).to.be.equal(response.id);
-    expect(PasswordService.verifyPassword(userPayload.password, user?.password as string)).to.be.equal(true);
+    expect(PasswordService.verifyPassword(defaultUser.password, user?.password as string)).to.be.equal(true);
 
-    expect(response.name).to.be.equal(userPayload.name);
-    expect(response.email).to.be.equal(userPayload.email);
-    expect(response.birthDate).to.be.equal(userPayload.birthDate);
+    expect(response.name).to.be.equal(defaultUser.name);
+    expect(response.email).to.be.equal(defaultUser.email);
+    expect(response.birthDate).to.be.equal(defaultUser.birthDate);
   });
 
   it('Test if createUser mutation cant create an user with the same email', async () => {
-    const userPayload = {
-      email: 'test@test.com',
-      name: 'test',
-      password: 'test12',
-      birthDate: '2024-10-02T18:17:49.314Z',
-    };
-    await UserHelper.createUserWithDbCall(userPayload);
-    const { errors: response } = await UserHelper.createUserWithApiCall(userPayload);
+    await UserHelper.createUserWithDbCall(defaultUser);
+    const { errors: response } = await UserHelper.createUserWithApiCall(defaultUser);
 
     expect(response).to.be.not.equal(null);
     expect(response).to.be.an('array');
     expect(response).to.have.length(1);
     expect(response[0]).to.have.property('message');
     expect(response[0].message).to.be.equal('User already exists!');
+  });
+
+  it('Test if login mutation can login an user', async () => {
+    await UserHelper.createUserWithApiCall(defaultUser);
+    const loginPayload = { email: defaultUser.email, password: defaultUser.password };
+    const { data: response } = await UserHelper.login(loginPayload);
+
+    expect(response).to.have.property('user');
+    expect(response).to.have.property('token');
+
+    expect(response.user).to.have.property('id');
+    expect(response.user).to.have.property('name');
+    expect(response.user).to.have.property('email');
+    expect(response.user).to.have.property('birthDate');
+
+    expect(response.user.name).to.be.equal(defaultUser.name);
+    expect(response.user.email).to.be.equal(defaultUser.email);
+    expect(response.user.birthDate).to.be.equal(defaultUser.birthDate);
+  });
+
+  it('Test if login mutation cant login an user with wrong password', async () => {
+    await UserHelper.createUserWithApiCall(defaultUser);
+    const loginPayload = { email: defaultUser.email, password: 'wrongpassword' };
+    const { errors: response } = await UserHelper.login(loginPayload);
+
+    expect(response).to.be.not.equal(null);
+    expect(response).to.be.an('array');
+    expect(response).to.have.length(1);
+    expect(response[0]).to.have.property('message');
+    expect(response[0].message).to.be.equal('Login unauthorized!');
+  });
+
+  it('Test if login mutation cant login an user with wrong email', async () => {
+    await UserHelper.createUserWithApiCall(defaultUser);
+    const loginPayload = { email: 'wrongemail@email.com', password: defaultUser.password };
+    const { errors: response } = await UserHelper.login(loginPayload);
+
+    expect(response).to.be.not.equal(null);
+    expect(response).to.be.an('array');
+    expect(response).to.have.length(1);
+    expect(response[0]).to.have.property('message');
+    expect(response[0].message).to.be.equal('Login unauthorized!');
   });
 });

@@ -13,4 +13,6 @@ export class UserModel {
 
   @Field()
   birthDate: Date;
+
+  password: string;
 }
