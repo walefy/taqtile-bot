@@ -10,7 +10,8 @@ describe('Create user suite (functional)', () => {
   });
 
   it('Test if createUser mutation can create an user', async () => {
-    const { data: response } = await UserHelper.createUserWithApiCall(UserHelper.defaultUser);
+    const token = await UserHelper.generateToken();
+    const { data: response } = await UserHelper.createUserWithApiCall(UserHelper.defaultUser, token);
 
     expect(response).to.have.property('id');
     expect(response).to.have.property('name');
@@ -33,12 +34,32 @@ describe('Create user suite (functional)', () => {
   });
 
   it('Test if createUser mutation cant create an user with the same email', async () => {
+    const token = await UserHelper.generateToken();
+
     await UserHelper.createUserWithDbCall(UserHelper.defaultUser);
-    const { errors: response } = await UserHelper.createUserWithApiCall(UserHelper.defaultUser);
+    const { errors: response } = await UserHelper.createUserWithApiCall(UserHelper.defaultUser, token);
 
     expect(response).to.be.an('array');
     expect(response).to.have.length(1);
     expect(response[0]).to.have.property('message');
     expect(response[0].message).to.be.equal('User already exists!');
+  });
+
+  it('Test if createUser mutation cant create an user with a invalid token', async () => {
+    const { errors: response } = await UserHelper.createUserWithApiCall(UserHelper.defaultUser, '');
+
+    expect(response).to.be.an('array');
+    expect(response).to.have.length(1);
+    expect(response[0]).to.have.property('message');
+    expect(response[0].message).to.be.equal('Invalid or expired token');
+  });
+
+  it('Test if createUser mutation cant create an user without a token', async () => {
+    const { errors: response } = await UserHelper.createUserWithApiCall(UserHelper.defaultUser, null, false);
+
+    expect(response).to.be.an('array');
+    expect(response).to.have.length(1);
+    expect(response[0]).to.have.property('message');
+    expect(response[0].message).to.be.equal('Token not provided');
   });
 });

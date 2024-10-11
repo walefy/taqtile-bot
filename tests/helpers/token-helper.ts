@@ -1,5 +1,5 @@
 export class TokenHelper {
-  static tokenExpirationInDays(expSeconds: number): number {
+  public static tokenExpirationInDays(expSeconds: number): number {
     const now = Math.floor(Date.now() / 1000);
     const differenceInSeconds = expSeconds - now;
 

@@ -20,6 +20,7 @@ export async function main(): Promise<ApolloServer> {
   const server = new ApolloServer({
     schema,
     formatError: apolloErrorHandling,
+    context: ({ req }) => ({ req }),
   });
 
   const { url } = await server.listen();

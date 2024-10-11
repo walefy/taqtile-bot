@@ -1,19 +1,23 @@
 import axios from 'axios';
 import { prisma } from '../test-setup';
 import { Prisma } from '@prisma/client';
+import { TokenService } from '../../src/services/token-service';
 
 export class UserHelper {
-  static defaultUser = {
+  public static defaultUser = {
     email: 'test@test.com',
     name: 'test',
     password: 'test12',
     birthDate: '2024-10-02T18:17:49.314Z',
   };
 
-  static async createUserWithApiCall(data: Record<string, unknown>) {
+  public static async createUserWithApiCall(data: Record<string, unknown>, token: string | null, addBearer = true) {
+    const tokenString = addBearer ? `Bearer ${token}` : token;
+
     const response = await axios({
       url: 'http://localhost:4000',
       method: 'post',
+      headers: { Authorization: tokenString },
       data: {
         query: `
           mutation CreateUser($data: UserInput!) {
@@ -32,11 +36,11 @@ export class UserHelper {
     return { data: response.data.data?.createUser, errors: response.data.errors };
   }
 
-  static async createUserWithDbCall(data: Prisma.UserCreateInput) {
+  public static async createUserWithDbCall(data: Prisma.UserCreateInput) {
     return prisma.user.create({ data });
   }
 
-  static async login(data: Record<string, unknown>) {
+  public static async login(data: Record<string, unknown>) {
     const response = await axios({
       url: 'http://localhost:4000',
       method: 'post',
@@ -59,5 +63,13 @@ export class UserHelper {
     });
 
     return { data: response.data.data?.login, errors: response.data.errors };
+  }
+
+  public static async generateToken() {
+    const data = { ...UserHelper.defaultUser, email: 'admin@admin.com' };
+    const user = await this.createUserWithDbCall(data);
+
+    const tokenService = new TokenService();
+    return tokenService.generateToken(user.email, { id: user.id }, true);
   }
 }
