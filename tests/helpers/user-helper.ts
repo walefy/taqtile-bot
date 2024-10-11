@@ -11,7 +11,7 @@ export class UserHelper {
     birthDate: '2024-10-02T18:17:49.314Z',
   };
 
-  static async createUserWithApiCall(data: Record<string, unknown>, token: string | null, addBearer = true) {
+  public static async createUserWithApiCall(data: Record<string, unknown>, token: string | null, addBearer = true) {
     const tokenString = addBearer ? `Bearer ${token}` : token;
 
     const response = await axios({
@@ -36,11 +36,11 @@ export class UserHelper {
     return { data: response.data.data?.createUser, errors: response.data.errors };
   }
 
-  static async createUserWithDbCall(data: Prisma.UserCreateInput) {
+  public static async createUserWithDbCall(data: Prisma.UserCreateInput) {
     return prisma.user.create({ data });
   }
 
-  static async login(data: Record<string, unknown>) {
+  public static async login(data: Record<string, unknown>) {
     const response = await axios({
       url: 'http://localhost:4000',
       method: 'post',
@@ -65,7 +65,7 @@ export class UserHelper {
     return { data: response.data.data?.login, errors: response.data.errors };
   }
 
-  static async generateToken() {
+  public static async generateToken() {
     const data = { ...UserHelper.defaultUser, email: 'admin@admin.com' };
     const user = await this.createUserWithDbCall(data);
 
