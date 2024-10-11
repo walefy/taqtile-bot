@@ -8,8 +8,8 @@
     "dev": "tsnd --transpile-only --ignore-watch node_modules src/index.ts",
     "lint": "eslint .",
     "lint:fix": "eslint . --fix",
-    "pretest": "dotenv -e .env.test -- npx prisma migrate deploy",
-    "test": "dotenv -e .env.test -- mocha"
+    "pretest": "dotenv -e .env.example -- npx prisma migrate deploy",
+    "test": "dotenv -e .env.example -- mocha"
   },
   "keywords": [],
   "author": "walefy",
