@@ -45,7 +45,6 @@ describe('User suite', () => {
     await UserHelper.createUserWithDbCall(defaultUser);
     const { errors: response } = await UserHelper.createUserWithApiCall(defaultUser);
 
-    expect(response).to.be.not.equal(null);
     expect(response).to.be.an('array');
     expect(response).to.have.length(1);
     expect(response[0]).to.have.property('message');
@@ -75,7 +74,6 @@ describe('User suite', () => {
     const loginPayload = { email: defaultUser.email, password: 'wrongpassword' };
     const { errors: response } = await UserHelper.login(loginPayload);
 
-    expect(response).to.be.not.equal(null);
     expect(response).to.be.an('array');
     expect(response).to.have.length(1);
     expect(response[0]).to.have.property('message');
@@ -87,7 +85,6 @@ describe('User suite', () => {
     const loginPayload = { email: 'wrongemail@email.com', password: defaultUser.password };
     const { errors: response } = await UserHelper.login(loginPayload);
 
-    expect(response).to.be.not.equal(null);
     expect(response).to.be.an('array');
     expect(response).to.have.length(1);
     expect(response[0]).to.have.property('message');
