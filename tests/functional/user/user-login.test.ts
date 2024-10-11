@@ -7,11 +7,12 @@ import { UserHelper } from '../../helpers/user-helper';
 
 describe('Login user suite (functional)', () => {
   afterEach(async () => {
-    prisma.user.deleteMany();
+    await prisma.user.deleteMany();
   });
 
   it('Test if login mutation can login an user', async () => {
-    await UserHelper.createUserWithApiCall(UserHelper.defaultUser);
+    const token = await UserHelper.generateToken();
+    await UserHelper.createUserWithApiCall(UserHelper.defaultUser, token);
     const loginPayload = { email: UserHelper.defaultUser.email, password: UserHelper.defaultUser.password };
     const { data: response } = await UserHelper.login(loginPayload);
 
@@ -29,7 +30,8 @@ describe('Login user suite (functional)', () => {
   });
 
   it('Test if login mutation cant login an user with wrong password', async () => {
-    await UserHelper.createUserWithApiCall(UserHelper.defaultUser);
+    const token = await UserHelper.generateToken();
+    await UserHelper.createUserWithApiCall(UserHelper.defaultUser, token);
     const loginPayload = { email: UserHelper.defaultUser.email, password: 'wrongpassword' };
     const { errors: response } = await UserHelper.login(loginPayload);
 
@@ -40,7 +42,8 @@ describe('Login user suite (functional)', () => {
   });
 
   it('Test if login mutation cant login an user with wrong email', async () => {
-    await UserHelper.createUserWithApiCall(UserHelper.defaultUser);
+    const token = await UserHelper.generateToken();
+    await UserHelper.createUserWithApiCall(UserHelper.defaultUser, token);
     const loginPayload = { email: 'wrongemail@email.com', password: UserHelper.defaultUser.password };
     const { errors: response } = await UserHelper.login(loginPayload);
 
@@ -51,7 +54,8 @@ describe('Login user suite (functional)', () => {
   });
 
   it('Test if login mutation can generate a token with 1 day of expiration', async () => {
-    await UserHelper.createUserWithApiCall(UserHelper.defaultUser);
+    const token = await UserHelper.generateToken();
+    await UserHelper.createUserWithApiCall(UserHelper.defaultUser, token);
     const loginPayload = { email: UserHelper.defaultUser.email, password: UserHelper.defaultUser.password };
     const { data: response } = await UserHelper.login(loginPayload);
 
@@ -62,7 +66,8 @@ describe('Login user suite (functional)', () => {
   });
 
   it('Test if login mutation can login an user with rememberMe', async () => {
-    await UserHelper.createUserWithApiCall(UserHelper.defaultUser);
+    const token = await UserHelper.generateToken();
+    await UserHelper.createUserWithApiCall(UserHelper.defaultUser, token);
     const loginPayload = {
       email: UserHelper.defaultUser.email,
       password: UserHelper.defaultUser.password,
