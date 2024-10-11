@@ -12,14 +12,12 @@ export class UserResolver {
   constructor(private readonly userService: UserService) {}
 
   @Mutation(() => UserModel)
-  async createUser(@Arg('data') data: UserInput) {
-    const user = await this.userService.createUser(data);
-    return user;
+  async createUser(@Arg('data') data: UserInput): Promise<UserModel> {
+    return this.userService.createUser(data);
   }
 
   @Mutation(() => LoginModel)
-  async login(@Arg('data') data: LoginInput) {
-    const login = await this.userService.login(data);
-    return login;
+  login(@Arg('data') data: LoginInput): Promise<LoginModel> {
+    return this.userService.login(data);
   }
 }

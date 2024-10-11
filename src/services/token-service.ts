@@ -14,12 +14,12 @@ export class TokenService {
     this.secret = process.env.JWT_SECRET;
   }
 
-  public generateToken(subject: string, payload: Record<string, unknown>, rememberMe = false) {
+  public generateToken(subject: string, payload: Record<string, unknown>, rememberMe = false): string {
     const expiresIn = rememberMe ? '7d' : '1d';
     return jwt.sign(payload, this.secret, { subject, expiresIn });
   }
 
-  public verifyToken(token: string) {
+  public verifyToken(token: string): Record<string, unknown> | string {
     return jwt.verify(token, this.secret);
   }
 }

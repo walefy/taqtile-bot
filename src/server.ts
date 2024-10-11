@@ -7,7 +7,7 @@ import { apolloErrorHandling } from './exceptions/apollo-error-handling';
 import Container from 'typedi';
 import { PrismaClient } from '@prisma/client';
 
-export async function main() {
+export async function main(): Promise<ApolloServer> {
   const prisma = new PrismaClient();
   Container.set(PrismaClient, prisma);
 
