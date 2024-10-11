@@ -95,7 +95,7 @@ describe('User suite', () => {
   });
 
   it('Test if login mutation can login an user with rememberMe', async () => {
-    await UserHelper.createUser(defaultUser);
+    await UserHelper.createUserWithApiCall(defaultUser);
     const loginPayload = { email: defaultUser.email, password: defaultUser.password, rememberMe: true };
     const { data: response } = await UserHelper.login(loginPayload);
 
