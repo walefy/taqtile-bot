@@ -3,6 +3,13 @@ import { prisma } from '../test-setup';
 import { Prisma } from '@prisma/client';
 
 export class UserHelper {
+  static defaultUser = {
+    email: 'test@test.com',
+    name: 'test',
+    password: 'test12',
+    birthDate: '2024-10-02T18:17:49.314Z',
+  };
+
   static async createUserWithApiCall(data: Record<string, unknown>) {
     const response = await axios({
       url: 'http://localhost:4000',
