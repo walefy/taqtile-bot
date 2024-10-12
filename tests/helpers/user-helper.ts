@@ -72,4 +72,27 @@ export class UserHelper {
     const tokenService = new TokenService();
     return tokenService.generateToken(user.email, { id: user.id }, true);
   }
+
+  public static async getUser(token: string, id: number) {
+    const response = await axios({
+      url: 'http://localhost:4000',
+      method: 'post',
+      headers: { Authorization: `Bearer ${token}` },
+      data: {
+        query: `
+          query User($data: UserInfoInput!) {
+            user(data: $data) {
+              id
+              name
+              email
+              birthDate
+            }
+          }
+        `,
+        variables: { data: { id } },
+      },
+    });
+
+    return { data: response.data.data?.user, errors: response.data.errors };
+  }
 }

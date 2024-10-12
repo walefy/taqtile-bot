@@ -16,4 +16,8 @@ export class UserRepository {
   async findByEmail(email: string): Promise<User | null> {
     return this.model.findFirst({ where: { email } });
   }
+
+  async findById(id: number): Promise<User | null> {
+    return this.model.findUnique({ where: { id } });
+  }
 }
