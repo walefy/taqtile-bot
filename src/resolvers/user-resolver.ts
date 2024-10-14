@@ -26,7 +26,7 @@ export class UserResolver {
 
   @Query(() => UserModel)
   @AuthGuard()
-  async user(@Arg('data') data: UserInfoInput): Promise<UserModel> {
+  user(@Arg('data') data: UserInfoInput): Promise<UserModel> {
     return this.userService.getUser(data.id);
   }
 }
