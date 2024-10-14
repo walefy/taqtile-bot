@@ -10,7 +10,7 @@ describe('Get user info suite (functional)', () => {
 
   it('Test if user query returns the correct user', async () => {
     const token = await UserHelper.generateToken();
-    const { data: userCreation } = await UserHelper.createUserWithApiCall(UserHelper.defaultUser, token);
+    const userCreation = await UserHelper.createUserWithDbCall(UserHelper.defaultUser);
 
     const { data: response } = await UserHelper.getUser(token, userCreation.id);
 
