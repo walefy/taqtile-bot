@@ -20,4 +20,11 @@ export class UserRepository {
   async findById(id: number): Promise<User | null> {
     return this.model.findUnique({ where: { id } });
   }
+
+  async findAll(limit?: number): Promise<User[]> {
+    return this.model.findMany({
+      orderBy: { name: 'asc' },
+      take: limit,
+    });
+  }
 }

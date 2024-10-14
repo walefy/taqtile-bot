@@ -40,6 +40,10 @@ export class UserHelper {
     return prisma.user.create({ data });
   }
 
+  public static async createUsersWithDbCall(data: Prisma.UserCreateInput[]) {
+    return prisma.user.createMany({ data });
+  }
+
   public static async login(data: Record<string, unknown>) {
     const response = await axios({
       url: 'http://localhost:4000',
@@ -94,5 +98,28 @@ export class UserHelper {
     });
 
     return { data: response.data.data?.user, errors: response.data.errors };
+  }
+
+  public static async getAllUsers(token: string, limit?: number) {
+    const response = await axios({
+      url: 'http://localhost:4000',
+      method: 'post',
+      headers: { Authorization: `Bearer ${token}` },
+      data: {
+        query: `
+            query Users($limit: Int) {
+              users(limit: $limit) {
+                id
+                name
+                email
+                birthDate
+              }
+            }
+          `,
+        variables: { limit },
+      },
+    });
+
+    return { data: response.data.data?.users, errors: response.data.errors };
   }
 }

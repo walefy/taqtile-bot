@@ -57,4 +57,8 @@ export class UserService {
 
     return user;
   }
+
+  getAllUsers(limit?: number): Promise<User[]> {
+    return this.userRepository.findAll(limit);
+  }
 }
