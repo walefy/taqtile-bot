@@ -8,6 +8,7 @@ import { LoginUnauthorizedException } from '../exceptions/login-unauthorized';
 import { LoginModel } from '../dtos/models/login-model';
 import { TokenService } from './token-service';
 import { User } from '../types/user';
+import { UserNotFoundException } from '../exceptions/user-not-found-exception';
 
 @Service()
 export class UserService {
@@ -45,5 +46,15 @@ export class UserService {
     const token = this.tokenService.generateToken(user.email, { id: user.id }, data.rememberMe);
 
     return { user, token };
+  }
+
+  async getUser(id: number): Promise<User> {
+    const user = await this.userRepository.findById(id);
+
+    if (!user) {
+      throw new UserNotFoundException();
+    }
+
+    return user;
   }
 }
