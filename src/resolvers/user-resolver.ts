@@ -1,4 +1,4 @@
-import { Arg, Mutation, Query, Resolver, Int } from 'type-graphql';
+import { Arg, Mutation, Query, Resolver } from 'type-graphql';
 import { UserModel } from '../dtos/models/user-model';
 import { UserInput } from '../dtos/inputs/user-input';
 import { UserService } from '../services/user-service';
@@ -7,6 +7,7 @@ import { LoginModel } from '../dtos/models/login-model';
 import { LoginInput } from '../dtos/inputs/login-input';
 import { AuthGuard } from '../decorators/auth-guard';
 import { UserInfoInput } from '../dtos/inputs/user-info-input';
+import { UsersInfoInput } from '../dtos/inputs/users-info-input';
 
 @Service()
 @Resolver()
@@ -32,7 +33,7 @@ export class UserResolver {
 
   @Query(() => [UserModel])
   @AuthGuard()
-  users(@Arg('limit', () => Int, { nullable: true }) limit?: number): Promise<UserModel[]> {
-    return this.userService.getAllUsers(limit);
+  users(@Arg('data', { nullable: true }) data?: UsersInfoInput): Promise<UserModel[]> {
+    return this.userService.getAllUsers(data?.page, data?.pageLimit);
   }
 }

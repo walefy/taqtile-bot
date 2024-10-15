@@ -34,7 +34,7 @@ describe('Get all users info suite (functional)', () => {
     const users = Array.from({ length: 10 }, (_, i) => ({ ...UserHelper.defaultUser, email: `fake${i}@fake.com` }));
     await UserHelper.createUsersWithDbCall(users);
 
-    const { data: response } = await UserHelper.getAllUsers(token, 5);
+    const { data: response } = await UserHelper.getAllUsers(token, { page: 1, pageLimit: 5 });
 
     expect(response).to.be.an('array');
     expect(response).to.have.length(5);
@@ -49,10 +49,39 @@ describe('Get all users info suite (functional)', () => {
   });
 
   it('Test if users query returns an error when the token is invalid', async () => {
-    const { errors: response } = await UserHelper.getAllUsers('', 1);
+    const { errors: response } = await UserHelper.getAllUsers('');
 
     expect(response).to.be.an('array');
     expect(response[0]).to.have.property('message');
     expect(response[0].message).to.be.equal('Invalid or expired token');
+  });
+
+  it('Test if pagination is working correctly', async () => {
+    const token = await UserHelper.generateToken();
+
+    const users = Array.from({ length: 6 }, (_, i) => ({
+      ...UserHelper.defaultUser,
+      email: `fake${i}@fake.com`,
+      name: i.toString(),
+    }));
+
+    await UserHelper.createUsersWithDbCall(users);
+
+    const { data: pageOneResponse } = await UserHelper.getAllUsers(token, { page: 1, pageLimit: 3 });
+    const { data: pageTwoResponse } = await UserHelper.getAllUsers(token, { page: 2, pageLimit: 3 });
+
+    expect(pageOneResponse).to.be.an('array');
+    expect(pageOneResponse).to.have.length(3);
+
+    expect(pageTwoResponse).to.be.an('array');
+    expect(pageTwoResponse).to.have.length(3);
+
+    for (const user of pageOneResponse) {
+      expect(user.name).to.be.oneOf(['0', '1', '2']);
+    }
+
+    for (const user of pageTwoResponse) {
+      expect(user.name).to.be.oneOf(['3', '4', '5']);
+    }
   });
 });

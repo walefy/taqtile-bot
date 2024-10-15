@@ -100,23 +100,36 @@ export class UserHelper {
     return { data: response.data.data?.user, errors: response.data.errors };
   }
 
-  public static async getAllUsers(token: string, limit?: number) {
+  public static async getAllUsers(token: string, paginationOptions?: { page?: number; pageLimit?: number }) {
+    const queryWithPagination = `
+      query Users($data: UsersInfoInput!) {
+        users(data: $data) {
+          id
+          name
+          email
+          birthDate
+        }
+      }
+    `;
+
+    const queryWithoutPagination = `
+      query Users {
+        users {
+          id
+          name
+          email
+          birthDate
+        }
+      }
+    `;
+
     const response = await axios({
       url: 'http://localhost:4000',
       method: 'post',
       headers: { Authorization: `Bearer ${token}` },
       data: {
-        query: `
-            query Users($limit: Int) {
-              users(limit: $limit) {
-                id
-                name
-                email
-                birthDate
-              }
-            }
-          `,
-        variables: { limit },
+        query: paginationOptions ? queryWithPagination : queryWithoutPagination,
+        variables: { data: paginationOptions },
       },
     });
 

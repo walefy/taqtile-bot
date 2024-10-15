@@ -21,10 +21,17 @@ export class UserRepository {
     return this.model.findUnique({ where: { id } });
   }
 
-  async findAll(limit?: number): Promise<User[]> {
+  async findAll(page?: number, pageLimit?: number): Promise<User[]> {
+    let skip = 0;
+
+    if (page && pageLimit) {
+      skip = pageLimit * (page - 1);
+    }
+
     return this.model.findMany({
       orderBy: { name: 'asc' },
-      take: limit,
+      take: pageLimit,
+      skip,
     });
   }
 }
