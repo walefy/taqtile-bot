@@ -34,6 +34,6 @@ export class UserResolver {
   @Query(() => [UserModel])
   @AuthGuard()
   users(@Arg('data', { nullable: true }) data?: UsersInfoInput): Promise<UserModel[]> {
-    return this.userService.getAllUsers(data?.page, data?.pageLimit);
+    return this.userService.getAllUsers({ page: data?.page, pageLimit: data?.pageLimit });
   }
 }

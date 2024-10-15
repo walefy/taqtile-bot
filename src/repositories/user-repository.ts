@@ -2,9 +2,10 @@ import { PrismaClient } from '@prisma/client';
 import { Service } from 'typedi';
 import { UserInput } from '../dtos/inputs/user-input';
 import { User } from '../types/user';
+import { findAllArgs, IUserRepository } from '../types/iuser-repository';
 
 @Service()
-export class UserRepository {
+export class UserRepository implements IUserRepository {
   private readonly model = this.prismaClient.user;
 
   constructor(private readonly prismaClient: PrismaClient) {}
@@ -21,8 +22,9 @@ export class UserRepository {
     return this.model.findUnique({ where: { id } });
   }
 
-  async findAll(page?: number, pageLimit?: number): Promise<User[]> {
+  async findAll(config: findAllArgs): Promise<User[]> {
     let skip = 0;
+    const { page, pageLimit } = config;
 
     if (page && pageLimit) {
       skip = pageLimit * (page - 1);

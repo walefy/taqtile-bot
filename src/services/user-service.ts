@@ -9,6 +9,7 @@ import { LoginModel } from '../dtos/models/login-model';
 import { TokenService } from './token-service';
 import { User } from '../types/user';
 import { UserNotFoundException } from '../exceptions/user-not-found-exception';
+import { findAllArgs } from '../types/iuser-repository';
 
 @Service()
 export class UserService {
@@ -58,7 +59,7 @@ export class UserService {
     return user;
   }
 
-  getAllUsers(page?: number, pageLimit?: number): Promise<User[]> {
-    return this.userRepository.findAll(page, pageLimit);
+  getAllUsers(config: findAllArgs): Promise<User[]> {
+    return this.userRepository.findAll(config);
   }
 }
