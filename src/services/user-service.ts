@@ -7,7 +7,7 @@ import { LoginInput } from '../dtos/inputs/login-input';
 import { LoginUnauthorizedException } from '../exceptions/login-unauthorized';
 import { LoginModel } from '../dtos/models/login-model';
 import { TokenService } from './token-service';
-import { User } from '../types/user';
+import { UserWithAddress } from '../types/user';
 import { UserNotFoundException } from '../exceptions/user-not-found-exception';
 import { findAllArgs } from '../types/iuser-repository';
 
@@ -18,7 +18,7 @@ export class UserService {
     private readonly tokenService: TokenService,
   ) {}
 
-  async createUser(data: UserInput): Promise<User> {
+  async createUser(data: UserInput): Promise<UserWithAddress> {
     const userExists = await this.userRepository.findByEmail(data.email);
 
     if (userExists) {
@@ -49,7 +49,7 @@ export class UserService {
     return { user, token };
   }
 
-  async getUser(id: number): Promise<User> {
+  async getUser(id: number): Promise<UserWithAddress> {
     const user = await this.userRepository.findById(id);
 
     if (!user) {
@@ -59,7 +59,7 @@ export class UserService {
     return user;
   }
 
-  getAllUsers(config: findAllArgs): Promise<User[]> {
+  getAllUsers(config: findAllArgs): Promise<UserWithAddress[]> {
     return this.userRepository.findAll(config);
   }
 }

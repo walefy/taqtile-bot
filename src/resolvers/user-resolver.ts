@@ -1,5 +1,5 @@
 import { Arg, Mutation, Query, Resolver } from 'type-graphql';
-import { UserModel } from '../dtos/models/user-model';
+import { UserWithAddress } from '../dtos/models/user-model';
 import { UserInput } from '../dtos/inputs/user-input';
 import { UserService } from '../services/user-service';
 import { Service } from 'typedi';
@@ -14,9 +14,9 @@ import { UsersInfoInput } from '../dtos/inputs/users-info-input';
 export class UserResolver {
   constructor(private readonly userService: UserService) {}
 
-  @Mutation(() => UserModel)
+  @Mutation(() => UserWithAddress)
   @AuthGuard()
-  createUser(@Arg('data') data: UserInput): Promise<UserModel> {
+  createUser(@Arg('data') data: UserInput): Promise<UserWithAddress> {
     return this.userService.createUser(data);
   }
 
@@ -25,15 +25,15 @@ export class UserResolver {
     return this.userService.login(data);
   }
 
-  @Query(() => UserModel)
+  @Query(() => UserWithAddress)
   @AuthGuard()
-  user(@Arg('data') data: UserInfoInput): Promise<UserModel> {
+  user(@Arg('data') data: UserInfoInput): Promise<UserWithAddress> {
     return this.userService.getUser(data.id);
   }
 
-  @Query(() => [UserModel])
+  @Query(() => [UserWithAddress])
   @AuthGuard()
-  users(@Arg('data', { nullable: true }) data?: UsersInfoInput): Promise<UserModel[]> {
+  users(@Arg('data', { nullable: true }) data?: UsersInfoInput): Promise<UserWithAddress[]> {
     return this.userService.getAllUsers({ page: data?.page, pageLimit: data?.pageLimit });
   }
 }

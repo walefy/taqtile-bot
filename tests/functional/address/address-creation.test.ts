@@ -36,7 +36,7 @@ describe('Create address suite (functional)', () => {
     expect(response.user.id).to.be.equal(user.id);
   });
 
-  it('Test if createAddress mutation can create two addresses for the same user', async () => {
+  it('Test if createAddress mutation can create two address for the same user', async () => {
     const token = await UserHelper.generateToken();
     const user = await UserHelper.createUserWithDbCall(UserHelper.defaultUser);
 

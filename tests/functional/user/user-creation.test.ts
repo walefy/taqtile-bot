@@ -3,6 +3,7 @@ import { expect } from 'chai';
 import { PasswordService } from '../../../src/services/password-service';
 import { prisma } from '../../test-setup';
 import { UserHelper } from '../../helpers/user-helper';
+import { AddressHelper } from '../../helpers/address-helper';
 
 describe('Create user suite (functional)', () => {
   afterEach(async () => {
@@ -12,13 +13,16 @@ describe('Create user suite (functional)', () => {
   it('Test if createUser mutation can create an user', async () => {
     const token = await UserHelper.generateToken();
     const { data: response } = await UserHelper.createUserWithApiCall(UserHelper.defaultUser, token);
+    await AddressHelper.createAddressWithDbCall({ ...AddressHelper.defaultAddress, userId: response.id });
 
     expect(response).to.have.property('id');
     expect(response).to.have.property('name');
     expect(response).to.have.property('email');
     expect(response).to.have.property('birthDate');
+    expect(response).to.have.property('address');
+    expect(response).not.to.have.property('password');
 
-    const user = await prisma.user.findUnique({ where: { id: response.id } });
+    const user = await prisma.user.findUnique({ where: { id: response.id }, include: { address: true } });
 
     expect(user).to.be.not.equal(null);
 
@@ -27,6 +31,44 @@ describe('Create user suite (functional)', () => {
     expect(user?.birthDate.toISOString()).to.be.equal(UserHelper.defaultUser.birthDate);
     expect(user?.id).to.be.equal(response.id);
     expect(PasswordService.verifyPassword(UserHelper.defaultUser.password, user?.password as string)).to.be.equal(true);
+
+    expect(user?.address).to.have.length(1);
+    expect(user?.address[0].city).to.be.equal(AddressHelper.defaultAddress.city);
+    expect(user?.address[0].complement).to.be.equal(AddressHelper.defaultAddress.complement);
+    expect(user?.address[0].neighborhood).to.be.equal(AddressHelper.defaultAddress.neighborhood);
+    expect(user?.address[0].state).to.be.equal(AddressHelper.defaultAddress.state);
+    expect(user?.address[0].street).to.be.equal(AddressHelper.defaultAddress.street);
+    expect(user?.address[0].streetNumber).to.be.equal(AddressHelper.defaultAddress.streetNumber);
+    expect(user?.address[0].zipCode).to.be.equal(AddressHelper.defaultAddress.zipCode);
+
+    expect(response.name).to.be.equal(UserHelper.defaultUser.name);
+    expect(response.email).to.be.equal(UserHelper.defaultUser.email);
+    expect(response.birthDate).to.be.equal(UserHelper.defaultUser.birthDate);
+  });
+
+  it('Test if createUser mutation can create an user without address', async () => {
+    const token = await UserHelper.generateToken();
+    const { data: response } = await UserHelper.createUserWithApiCall(UserHelper.defaultUser, token);
+
+    expect(response).to.have.property('id');
+    expect(response).to.have.property('name');
+    expect(response).to.have.property('email');
+    expect(response).to.have.property('birthDate');
+    expect(response).not.to.have.property('password');
+    expect(response).to.have.property('address');
+    expect(response.address).to.have.length(0);
+
+    const user = await prisma.user.findUnique({ where: { id: response.id }, include: { address: true } });
+
+    expect(user).to.be.not.equal(null);
+
+    expect(user?.name).to.be.equal(UserHelper.defaultUser.name);
+    expect(user?.email).to.be.equal(UserHelper.defaultUser.email);
+    expect(user?.birthDate.toISOString()).to.be.equal(UserHelper.defaultUser.birthDate);
+    expect(user?.id).to.be.equal(response.id);
+    expect(PasswordService.verifyPassword(UserHelper.defaultUser.password, user?.password as string)).to.be.equal(true);
+
+    expect(user?.address).to.have.length(0);
 
     expect(response.name).to.be.equal(UserHelper.defaultUser.name);
     expect(response.email).to.be.equal(UserHelper.defaultUser.email);

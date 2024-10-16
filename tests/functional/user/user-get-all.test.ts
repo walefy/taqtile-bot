@@ -2,6 +2,7 @@ import { afterEach, describe, it } from 'mocha';
 import { prisma } from '../../test-setup';
 import { UserHelper } from '../../helpers/user-helper';
 import { expect } from 'chai';
+import { AddressHelper } from '../../helpers/address-helper';
 
 describe('Get all users info suite (functional)', () => {
   afterEach(async () => {
@@ -15,6 +16,7 @@ describe('Get all users info suite (functional)', () => {
       ...UserHelper.defaultUser,
       email: `fake${i}@fake.com`,
       name: i.toString(),
+      address: { create: AddressHelper.defaultAddress },
     }));
 
     await UserHelper.createUsersWithDbCall(users);
@@ -31,18 +33,32 @@ describe('Get all users info suite (functional)', () => {
       expect(user).to.have.property('name');
       expect(user).to.have.property('email');
       expect(user).to.have.property('birthDate');
+      expect(user).to.have.property('address');
       expect(user).not.to.have.property('password');
 
       expect(user.name).to.be.equal(i.toString());
       expect(user.email).to.be.equal(`fake${i}@fake.com`);
       expect(user.birthDate).to.be.equal(UserHelper.defaultUser.birthDate);
+
+      expect(user.address).to.have.length(1);
+      expect(user.address[0]).to.have.property('id');
+      expect(user.address[0]).to.have.property('zipCode');
+      expect(user.address[0]).to.have.property('street');
+      expect(user.address[0]).to.have.property('streetNumber');
+      expect(user.address[0]).to.have.property('complement');
+      expect(user.address[0]).to.have.property('neighborhood');
+      expect(user.address[0]).to.have.property('city');
     }
   });
 
   it('Test if users query returns all users with limit 5', async () => {
     const token = await UserHelper.generateToken();
 
-    const users = Array.from({ length: 10 }, (_, i) => ({ ...UserHelper.defaultUser, email: `fake${i}@fake.com` }));
+    const users = Array.from({ length: 10 }, (_, i) => ({
+      ...UserHelper.defaultUser,
+      email: `fake${i}@fake.com`,
+      address: { create: AddressHelper.defaultAddress },
+    }));
     await UserHelper.createUsersWithDbCall(users);
 
     const paginationOptions = { page: 1, pageLimit: 5 };
@@ -56,6 +72,7 @@ describe('Get all users info suite (functional)', () => {
       expect(user).to.have.property('name');
       expect(user).to.have.property('email');
       expect(user).to.have.property('birthDate');
+      expect(user).to.have.property('address');
       expect(user).not.to.have.property('password');
     }
   });

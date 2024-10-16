@@ -1,7 +1,7 @@
 import { PrismaClient } from '@prisma/client';
 import { Service } from 'typedi';
 import { UserInput } from '../dtos/inputs/user-input';
-import { User } from '../types/user';
+import { UserWithAddress } from '../types/user';
 import { findAllArgs, IUserRepository } from '../types/iuser-repository';
 
 @Service()
@@ -10,19 +10,19 @@ export class UserRepository implements IUserRepository {
 
   constructor(private readonly prismaClient: PrismaClient) {}
 
-  create(data: UserInput): Promise<User> {
-    return this.model.create({ data });
+  create(data: UserInput): Promise<UserWithAddress> {
+    return this.model.create({ data, include: { address: true } });
   }
 
-  findByEmail(email: string): Promise<User | null> {
-    return this.model.findFirst({ where: { email } });
+  findByEmail(email: string): Promise<UserWithAddress | null> {
+    return this.model.findFirst({ where: { email }, include: { address: true } });
   }
 
-  findById(id: number): Promise<User | null> {
-    return this.model.findUnique({ where: { id } });
+  findById(id: number): Promise<UserWithAddress | null> {
+    return this.model.findUnique({ where: { id }, include: { address: true } });
   }
 
-  findAll(config: findAllArgs): Promise<User[]> {
+  findAll(config: findAllArgs): Promise<UserWithAddress[]> {
     let skip = 0;
     const { page, pageLimit } = config;
 
@@ -32,6 +32,7 @@ export class UserRepository implements IUserRepository {
 
     return this.model.findMany({
       orderBy: { name: 'asc' },
+      include: { address: true },
       take: pageLimit,
       skip,
     });

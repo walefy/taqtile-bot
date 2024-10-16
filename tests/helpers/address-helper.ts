@@ -1,4 +1,8 @@
+import { Prisma } from '@prisma/client';
 import axios from 'axios';
+import { prisma } from '../test-setup';
+
+export type AddressCreateInput = Omit<Prisma.AddressCreateInput, 'user'> & { userId: number };
 
 export class AddressHelper {
   public static defaultAddress = {
@@ -42,5 +46,9 @@ export class AddressHelper {
     });
 
     return { data: response.data.data?.createAddress, errors: response.data.errors };
+  }
+
+  public static async createAddressWithDbCall(data: AddressCreateInput) {
+    return prisma.address.create({ data });
   }
 }
