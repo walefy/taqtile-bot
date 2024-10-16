@@ -3,6 +3,11 @@ import { prisma } from '../test-setup';
 import { Prisma } from '@prisma/client';
 import { TokenService } from '../../src/services/token-service';
 
+type GetAllUserOptions = {
+  ignoreAdmin?: boolean;
+  paginationOptions?: { page: number; pageLimit: number };
+};
+
 export class UserHelper {
   public static defaultUser = {
     email: 'test@test.com',
@@ -10,6 +15,8 @@ export class UserHelper {
     password: 'test12',
     birthDate: '2024-10-02T18:17:49.314Z',
   };
+
+  public static defaultAdmin = { ...UserHelper.defaultUser, email: 'admin@admin.com', name: 'zzzzzzz' };
 
   public static async createUserWithApiCall(data: Record<string, unknown>, token: string | null, addBearer = true) {
     const tokenString = addBearer ? `Bearer ${token}` : token;
@@ -40,6 +47,10 @@ export class UserHelper {
     return prisma.user.create({ data });
   }
 
+  public static async createUsersWithDbCall(data: Prisma.UserCreateInput[]) {
+    return prisma.user.createMany({ data });
+  }
+
   public static async login(data: Record<string, unknown>) {
     const response = await axios({
       url: 'http://localhost:4000',
@@ -66,8 +77,7 @@ export class UserHelper {
   }
 
   public static async generateToken() {
-    const data = { ...UserHelper.defaultUser, email: 'admin@admin.com' };
-    const user = await this.createUserWithDbCall(data);
+    const user = await this.createUserWithDbCall(UserHelper.defaultAdmin);
 
     const tokenService = new TokenService();
     return tokenService.generateToken(user.email, { id: user.id }, true);
@@ -94,5 +104,53 @@ export class UserHelper {
     });
 
     return { data: response.data.data?.user, errors: response.data.errors };
+  }
+
+  public static async getAllUsers(token: string, options?: GetAllUserOptions) {
+    const paginationOptions = options?.paginationOptions;
+
+    const queryWithPagination = `
+      query Users($data: UsersInfoInput!) {
+        users(data: $data) {
+          id
+          name
+          email
+          birthDate
+        }
+      }
+    `;
+
+    const queryWithoutPagination = `
+      query Users {
+        users {
+          id
+          name
+          email
+          birthDate
+        }
+      }
+    `;
+
+    const response = await axios({
+      url: 'http://localhost:4000',
+      method: 'post',
+      headers: { Authorization: `Bearer ${token}` },
+      data: {
+        query: paginationOptions ? queryWithPagination : queryWithoutPagination,
+        variables: { data: paginationOptions },
+      },
+    });
+
+    if (options?.ignoreAdmin) {
+      const adminIndex = response.data.data.users.findIndex(
+        (user: { email: string }) => user.email === UserHelper.defaultAdmin.email,
+      );
+
+      if (adminIndex >= 0) {
+        response.data.data.users.splice(adminIndex, 1);
+      }
+    }
+
+    return { data: response.data.data?.users, errors: response.data.errors };
   }
 }

@@ -23,7 +23,7 @@ describe('Get user info suite (functional)', () => {
     expect(response.id).to.be.equal(userCreation.id);
     expect(response.name).to.be.equal(userCreation.name);
     expect(response.email).to.be.equal(userCreation.email);
-    expect(response.birthDate).to.be.equal(userCreation.birthDate);
+    expect(response.birthDate).to.be.equal(userCreation.birthDate.toISOString());
   });
 
   it('Test if user query returns an error when the user does not exist', async () => {

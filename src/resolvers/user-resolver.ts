@@ -7,6 +7,7 @@ import { LoginModel } from '../dtos/models/login-model';
 import { LoginInput } from '../dtos/inputs/login-input';
 import { AuthGuard } from '../decorators/auth-guard';
 import { UserInfoInput } from '../dtos/inputs/user-info-input';
+import { UsersInfoInput } from '../dtos/inputs/users-info-input';
 
 @Service()
 @Resolver()
@@ -15,7 +16,7 @@ export class UserResolver {
 
   @Mutation(() => UserModel)
   @AuthGuard()
-  async createUser(@Arg('data') data: UserInput): Promise<UserModel> {
+  createUser(@Arg('data') data: UserInput): Promise<UserModel> {
     return this.userService.createUser(data);
   }
 
@@ -28,5 +29,11 @@ export class UserResolver {
   @AuthGuard()
   user(@Arg('data') data: UserInfoInput): Promise<UserModel> {
     return this.userService.getUser(data.id);
+  }
+
+  @Query(() => [UserModel])
+  @AuthGuard()
+  users(@Arg('data', { nullable: true }) data?: UsersInfoInput): Promise<UserModel[]> {
+    return this.userService.getAllUsers({ page: data?.page, pageLimit: data?.pageLimit });
   }
 }
