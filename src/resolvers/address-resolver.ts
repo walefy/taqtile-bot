@@ -18,7 +18,7 @@ export class AddressResolver {
 
   @Query(() => [AddressModel])
   @AuthGuard()
-  async findAddressByUserId(@Arg('userId', () => Int) userId: number): Promise<AddressModel[]> {
+  findAddressByUserId(@Arg('userId', () => Int) userId: number): Promise<AddressModel[]> {
     return this.service.findAddressByUserId(userId);
   }
 }
