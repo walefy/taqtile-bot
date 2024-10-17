@@ -1,6 +1,6 @@
 import axios from 'axios';
 import { prisma } from '../test-setup';
-import { Prisma } from '@prisma/client';
+import { Prisma, User } from '@prisma/client';
 import { TokenService } from '../../src/services/token-service';
 
 type GetAllUserOptions = {
@@ -33,6 +33,16 @@ export class UserHelper {
               name
               email
               birthDate
+              address {
+                id
+                zipCode
+                city
+                complement
+                neighborhood
+                state
+                street
+                streetNumber
+              }
             }
           }
         `,
@@ -44,11 +54,17 @@ export class UserHelper {
   }
 
   public static async createUserWithDbCall(data: Prisma.UserCreateInput) {
-    return prisma.user.create({ data });
+    return prisma.user.create({ data, include: { address: true } });
   }
 
   public static async createUsersWithDbCall(data: Prisma.UserCreateInput[]) {
-    return prisma.user.createMany({ data });
+    const users: User[] = [];
+    for (const user of data) {
+      const userCreation = await prisma.user.create({ data: user, include: { address: true } });
+      users.push(userCreation);
+    }
+
+    return users;
   }
 
   public static async login(data: Record<string, unknown>) {
@@ -96,6 +112,16 @@ export class UserHelper {
               name
               email
               birthDate
+              address {
+                id
+                zipCode
+                city
+                complement
+                neighborhood
+                state
+                street
+                streetNumber
+              }
             }
           }
         `,
@@ -108,6 +134,16 @@ export class UserHelper {
 
   public static async getAllUsers(token: string, options?: GetAllUserOptions) {
     const paginationOptions = options?.paginationOptions;
+    const addressParams: string = [
+      'id',
+      'zipCode',
+      'city',
+      'complement',
+      'neighborhood',
+      'state',
+      'street',
+      'streetNumber',
+    ].join(' ');
 
     const queryWithPagination = `
       query Users($data: UsersInfoInput!) {
@@ -116,6 +152,7 @@ export class UserHelper {
           name
           email
           birthDate
+          address { ${addressParams} }
         }
       }
     `;
@@ -127,6 +164,7 @@ export class UserHelper {
           name
           email
           birthDate
+          address { ${addressParams} }
         }
       }
     `;
