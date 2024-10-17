@@ -55,6 +55,9 @@ describe('Create address suite (functional)', () => {
 
     const response = await AddressHelper.createAddressWithDbCall({ ...AddressHelper.defaultAddress, userId: user.id });
     const { data: response2 } = await AddressHelper.createAddress(user.id, token);
+    const userInDb = await prisma.user.findUnique({ where: { id: user.id }, include: { address: true } });
+
+    expect(userInDb!.address).to.have.length(2);
 
     expect(response).to.have.property('id');
     expect(response2).to.have.property('id');
@@ -62,6 +65,45 @@ describe('Create address suite (functional)', () => {
     expect(response.id).to.be.not.equal(response2.id);
     expect(response.userId).to.be.equal(response2.user.id);
     expect(response.userId).to.be.equal(user.id);
+
+    expect(response2).to.have.property('city');
+    expect(response2).to.have.property('complement');
+    expect(response2).to.have.property('neighborhood');
+    expect(response2).to.have.property('state');
+    expect(response2).to.have.property('street');
+    expect(response2).to.have.property('streetNumber');
+    expect(response2).to.have.property('zipCode');
+    expect(response2).to.have.property('user');
+    expect(response2.user).not.to.have.property('password');
+
+    expect(response2.city).to.be.equal(AddressHelper.defaultAddress.city);
+    expect(response2.complement).to.be.equal(AddressHelper.defaultAddress.complement);
+    expect(response2.neighborhood).to.be.equal(AddressHelper.defaultAddress.neighborhood);
+    expect(response2.state).to.be.equal(AddressHelper.defaultAddress.state);
+    expect(response2.street).to.be.equal(AddressHelper.defaultAddress.street);
+    expect(response2.streetNumber).to.be.equal(AddressHelper.defaultAddress.streetNumber);
+    expect(response2.zipCode).to.be.equal(AddressHelper.defaultAddress.zipCode);
+
+    for (const address of userInDb!.address) {
+      expect(address).to.have.property('id');
+      expect(address).to.have.property('city');
+      expect(address).to.have.property('complement');
+      expect(address).to.have.property('neighborhood');
+      expect(address).to.have.property('state');
+      expect(address).to.have.property('street');
+      expect(address).to.have.property('streetNumber');
+      expect(address).to.have.property('zipCode');
+      expect(address).to.have.property('userId');
+
+      expect(address.city).to.be.equal(AddressHelper.defaultAddress.city);
+      expect(address.complement).to.be.equal(AddressHelper.defaultAddress.complement);
+      expect(address.neighborhood).to.be.equal(AddressHelper.defaultAddress.neighborhood);
+      expect(address.state).to.be.equal(AddressHelper.defaultAddress.state);
+      expect(address.street).to.be.equal(AddressHelper.defaultAddress.street);
+      expect(address.streetNumber).to.be.equal(AddressHelper.defaultAddress.streetNumber);
+      expect(address.zipCode).to.be.equal(AddressHelper.defaultAddress.zipCode);
+      expect(address.userId).to.be.equal(user.id);
+    }
   });
 
   it('Test if createAddress mutation cant create an address with a invalid token', async () => {

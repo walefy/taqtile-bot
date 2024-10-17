@@ -49,6 +49,6 @@ export class AddressHelper {
   }
 
   public static async createAddressWithDbCall(data: AddressCreateInput) {
-    return prisma.address.create({ data });
+    return prisma.address.create({ data, include: { user: true } });
   }
 }
