@@ -53,15 +53,15 @@ describe('Create address suite (functional)', () => {
     const token = await UserHelper.generateToken();
     const user = await UserHelper.createUserWithDbCall(UserHelper.defaultUser);
 
-    const { data: response } = await AddressHelper.createAddress(user.id, token);
+    const response = await AddressHelper.createAddressWithDbCall({ ...AddressHelper.defaultAddress, userId: user.id });
     const { data: response2 } = await AddressHelper.createAddress(user.id, token);
 
     expect(response).to.have.property('id');
     expect(response2).to.have.property('id');
 
     expect(response.id).to.be.not.equal(response2.id);
-    expect(response.user.id).to.be.equal(response2.user.id);
-    expect(response.user.id).to.be.equal(user.id);
+    expect(response.userId).to.be.equal(response2.user.id);
+    expect(response.userId).to.be.equal(user.id);
   });
 
   it('Test if createAddress mutation cant create an address with a invalid token', async () => {
