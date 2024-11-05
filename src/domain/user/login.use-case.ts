@@ -1,4 +1,4 @@
-import { Command } from '@core/command';
+import { Command } from '@core/contracts';
 import { LoginUnauthorizedError } from '@core/error';
 import { PasswordService, TokenService } from '@core/security';
 import { UserDbDataSource } from '@data/user/user.db.data-source';

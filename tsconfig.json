@@ -34,8 +34,19 @@
       ],
       "@data/*": [
         "./data/*"
+      ],
+      "@api": [
+        "./api"
+      ],
+      "@api/*": [
+        "./api/*"
       ]
     }
   },
-  "include": ["src/**/*"]
+  "include": ["src/**/*"],
+  "exclude": [
+    "node_modules",
+    "dist",
+    "*.test.ts",
+  ]
 }

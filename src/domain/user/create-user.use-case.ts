@@ -1,4 +1,4 @@
-import { Command } from '@core/command';
+import { Command } from '@core/contracts';
 import { UserAlreadyExistsError } from '@core/error';
 import { PasswordService } from '@core/security';
 import { UserDbDataSource } from '@data/user/user.db.data-source';

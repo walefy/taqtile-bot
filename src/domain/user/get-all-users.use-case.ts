@@ -1,4 +1,4 @@
-import { Command } from '@core/command';
+import { Command } from '@core/contracts';
 import { findAllArgs, UserDbDataSource } from '@data/user/user.db.data-source';
 import { UserWithAddressModel } from '@domain/model';
 import { Service } from 'typedi';

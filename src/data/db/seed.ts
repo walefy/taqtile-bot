@@ -1,6 +1,6 @@
 import process from 'process';
 import { PrismaClient } from '@prisma/client';
-import { PasswordService } from '../../services/password-service';
+import { PasswordService } from '@core/security';
 
 const prisma = new PrismaClient();
 
