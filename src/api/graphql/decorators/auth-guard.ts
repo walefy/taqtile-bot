@@ -1,5 +1,5 @@
 import { createMethodMiddlewareDecorator } from 'type-graphql';
-import { AuthenticationException } from '../../../exceptions/authentication-exception';
+import { AuthenticationError } from '@core/error';
 import { TokenService } from '../../../services/token-service';
 import { AuthGuardContext } from '@graphql/server.context';
 
@@ -8,7 +8,7 @@ export function AuthGuard() {
     const authorization = context.req.headers['authorization'];
 
     if (!authorization) {
-      throw new AuthenticationException('Token not provided');
+      throw new AuthenticationError('Token not provided');
     }
 
     try {
@@ -17,7 +17,7 @@ export function AuthGuard() {
       const payload = tokenService.verifyToken(token) as { sub: string };
       context.auth = { user: { email: payload.sub } };
     } catch {
-      throw new AuthenticationException('Invalid or expired token');
+      throw new AuthenticationError('Invalid or expired token');
     }
 
     return next();

@@ -1,10 +1,8 @@
-import { UserAlreadyExistsException } from '../exceptions/user-already-exists-exception';
+import { LoginUnauthorizedError, UserAlreadyExistsError, UserNotFoundError } from '@core/error';
 import { PasswordService } from './password-service';
 import { Service } from 'typedi';
 import { UserRepository } from '../repositories/user-repository';
-import { LoginUnauthorizedException } from '../exceptions/login-unauthorized';
 import { TokenService } from './token-service';
-import { UserNotFoundException } from '../exceptions/user-not-found-exception';
 import { findAllArgs } from '../types/iuser-repository';
 import { LoginInputModel, LoginModel, UserInputModel, UserWithAddressModel } from '@domain/model';
 
@@ -19,7 +17,7 @@ export class UserService {
     const userExists = await this.userRepository.findByEmail(data.email);
 
     if (userExists) {
-      throw new UserAlreadyExistsException();
+      throw new UserAlreadyExistsError();
     }
 
     data.password = PasswordService.hashPassword(data.password);
@@ -32,13 +30,13 @@ export class UserService {
     const user = await this.userRepository.findByEmail(data.email);
 
     if (!user) {
-      throw new LoginUnauthorizedException();
+      throw new LoginUnauthorizedError();
     }
 
     const passwordMatch = PasswordService.verifyPassword(data.password, user.password);
 
     if (!passwordMatch) {
-      throw new LoginUnauthorizedException();
+      throw new LoginUnauthorizedError();
     }
 
     const token = this.tokenService.generateToken(user.email, { id: user.id }, data.rememberMe);
@@ -50,7 +48,7 @@ export class UserService {
     const user = await this.userRepository.findById(id);
 
     if (!user) {
-      throw new UserNotFoundException();
+      throw new UserNotFoundError();
     }
 
     return user;

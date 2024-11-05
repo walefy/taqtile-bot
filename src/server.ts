@@ -1,11 +1,11 @@
 import 'reflect-metadata';
 import { ApolloServer } from 'apollo-server';
 import { buildSchema } from 'type-graphql';
-import { apolloErrorHandling } from './exceptions/apollo-error-handling';
 import Container from 'typedi';
 import { PrismaClient } from '@prisma/client';
 import { UserResolver } from '@graphql/modules/user/user.resolver';
 import { AddressResolver } from '@graphql/modules/address/address.resolver';
+import { apolloErrorHandling } from '@graphql/apollo-error-handling';
 
 export async function main(): Promise<ApolloServer> {
   const prisma = new PrismaClient();

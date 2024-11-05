@@ -1,4 +1,4 @@
-export class CustomException extends Error {
+export class CustomError extends Error {
   public readonly code: number;
   public readonly message: string;
   public readonly additionalInfo?: unknown;

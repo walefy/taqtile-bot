@@ -22,6 +22,12 @@
       ],
       "@graphql/*": [
         "./api/graphql/*"
+      ],
+      "@core": [
+        "./core"
+      ],
+      "@core/*": [
+        "./core/*"
       ]
     }
   },

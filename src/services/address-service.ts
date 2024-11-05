@@ -1,7 +1,7 @@
 import { Service } from 'typedi';
 import { AddressRepository } from '../repositories/address-repository';
 import { UserRepository } from '../repositories/user-repository';
-import { UserNotFoundException } from '../exceptions/user-not-found-exception';
+import { UserNotFoundError } from '@core/error';
 import { AddressInputModel, AddressModel } from '@domain/model';
 
 @Service()
@@ -15,7 +15,7 @@ export class AddressService {
     const user = await this.userRepository.findById(data.userId);
 
     if (!user) {
-      throw new UserNotFoundException();
+      throw new UserNotFoundError();
     }
 
     return this.addressRepository.create(data);
@@ -25,7 +25,7 @@ export class AddressService {
     const user = await this.userRepository.findById(userId);
 
     if (!user) {
-      throw new UserNotFoundException();
+      throw new UserNotFoundError();
     }
 
     return this.addressRepository.findByUserId(userId);
