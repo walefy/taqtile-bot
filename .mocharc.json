@@ -4,6 +4,7 @@
   ],
   "require": [
     "ts-node/register",
+    "tsconfig-paths/register",
     "chai/register-expect.js"
   ],
   "file": [

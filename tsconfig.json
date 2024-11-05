@@ -9,6 +9,21 @@
     "strict": true,
     "skipLibCheck": true,
     "strictPropertyInitialization": false,
+    "baseUrl": "./src",
+    "paths": {
+      "@domain": [
+        "./domain"
+      ],
+      "@domain/*": [
+        "./domain/*"
+      ],
+      "@graphql": [
+        "./api/graphql"
+      ],
+      "@graphql/*": [
+        "./api/graphql/*"
+      ]
+    }
   },
   "include": ["src/**/*"]
 }
