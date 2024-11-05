@@ -2,11 +2,11 @@ import 'reflect-metadata';
 import { ApolloServer } from 'apollo-server';
 import { buildSchema } from 'type-graphql';
 import { HelloWorldResolver } from './resolvers/hello-world-resolver';
-import { UserResolver } from './resolvers/user-resolver';
 import { apolloErrorHandling } from './exceptions/apollo-error-handling';
 import Container from 'typedi';
 import { PrismaClient } from '@prisma/client';
 import { AddressResolver } from './resolvers/address-resolver';
+import { UserResolver } from '@graphql/modules/user/user.resolver';
 
 export async function main(): Promise<ApolloServer> {
   const prisma = new PrismaClient();

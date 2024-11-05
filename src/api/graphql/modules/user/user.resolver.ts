@@ -1,17 +1,16 @@
 import { Arg, Mutation, Query, Resolver } from 'type-graphql';
-import { UserWithAddress } from '../dtos/models/user-model';
-import { UserInput } from '../dtos/inputs/user-input';
-import { UserService } from '../services/user-service';
 import { Service } from 'typedi';
-import { LoginModel } from '../dtos/models/login-model';
-import { LoginInput } from '../dtos/inputs/login-input';
-import { AuthGuard } from '../decorators/auth-guard';
-import { UserInfoInput } from '../dtos/inputs/user-info-input';
-import { UsersInfoInput } from '../dtos/inputs/users-info-input';
+import { UserWithAddress } from './user.type';
+import { AuthGuard } from 'decorators/auth-guard';
+import { UserService } from 'services/user-service';
+import { UserInfoInput, UserInput, UsersInfoInput } from './user.input';
+import { Login } from './login.type';
+import { LoginInput } from './login.input';
 
 @Service()
 @Resolver()
 export class UserResolver {
+  // TODO: transformar userService em um use-case
   constructor(private readonly userService: UserService) {}
 
   @Mutation(() => UserWithAddress)
@@ -20,8 +19,8 @@ export class UserResolver {
     return this.userService.createUser(data);
   }
 
-  @Mutation(() => LoginModel)
-  login(@Arg('data') data: LoginInput): Promise<LoginModel> {
+  @Mutation(() => Login)
+  login(@Arg('data') data: LoginInput): Promise<Login> {
     return this.userService.login(data);
   }
 

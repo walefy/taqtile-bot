@@ -1,5 +1,5 @@
+import { User } from '@graphql/modules/user/user.type';
 import { Field, Int, ObjectType } from 'type-graphql';
-import { UserModel } from './user-model';
 
 @ObjectType()
 export abstract class BaseAddressModel {
@@ -30,8 +30,8 @@ export abstract class BaseAddressModel {
 
 @ObjectType()
 export class AddressModel extends BaseAddressModel {
-  @Field(() => UserModel)
-  user: UserModel;
+  @Field(() => User)
+  user: User;
 }
 
 @ObjectType()

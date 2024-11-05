@@ -1,8 +1,9 @@
+import { LoginInputModel } from '@domain/model';
 import { IsBoolean, IsEmail, IsOptional, IsString } from 'class-validator';
 import { Field, InputType } from 'type-graphql';
 
 @InputType()
-export class LoginInput {
+export class LoginInput implements LoginInputModel {
   @Field()
   @IsEmail(undefined, { message: 'The email field must receive a valid email' })
   email: string;

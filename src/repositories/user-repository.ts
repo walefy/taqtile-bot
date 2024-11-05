@@ -1,8 +1,8 @@
 import { PrismaClient } from '@prisma/client';
 import { Service } from 'typedi';
-import { UserInput } from '../dtos/inputs/user-input';
 import { UserWithAddress } from '../types/user';
 import { findAllArgs, IUserRepository } from '../types/iuser-repository';
+import { UserInputModel } from '@domain/model';
 
 @Service()
 export class UserRepository implements IUserRepository {
@@ -10,7 +10,7 @@ export class UserRepository implements IUserRepository {
 
   constructor(private readonly prismaClient: PrismaClient) {}
 
-  create(data: UserInput): Promise<UserWithAddress> {
+  create(data: UserInputModel): Promise<UserWithAddress> {
     return this.model.create({ data, include: { address: true } });
   }
 

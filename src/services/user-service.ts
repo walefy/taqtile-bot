@@ -1,15 +1,13 @@
-import { UserInput } from '../dtos/inputs/user-input';
 import { UserAlreadyExistsException } from '../exceptions/user-already-exists-exception';
 import { PasswordService } from './password-service';
 import { Service } from 'typedi';
 import { UserRepository } from '../repositories/user-repository';
-import { LoginInput } from '../dtos/inputs/login-input';
 import { LoginUnauthorizedException } from '../exceptions/login-unauthorized';
-import { LoginModel } from '../dtos/models/login-model';
 import { TokenService } from './token-service';
 import { UserWithAddress } from '../types/user';
 import { UserNotFoundException } from '../exceptions/user-not-found-exception';
 import { findAllArgs } from '../types/iuser-repository';
+import { LoginInputModel, LoginModel, UserInputModel } from '@domain/model';
 
 @Service()
 export class UserService {
@@ -18,7 +16,7 @@ export class UserService {
     private readonly tokenService: TokenService,
   ) {}
 
-  async createUser(data: UserInput): Promise<UserWithAddress> {
+  async createUser(data: UserInputModel): Promise<UserWithAddress> {
     const userExists = await this.userRepository.findByEmail(data.email);
 
     if (userExists) {
@@ -31,7 +29,7 @@ export class UserService {
     return user;
   }
 
-  async login(data: LoginInput): Promise<LoginModel> {
+  async login(data: LoginInputModel): Promise<LoginModel> {
     const user = await this.userRepository.findByEmail(data.email);
 
     if (!user) {

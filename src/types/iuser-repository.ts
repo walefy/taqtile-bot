@@ -1,4 +1,4 @@
-import { UserInput } from '../dtos/inputs/user-input';
+import { UserInputModel } from '@domain/model';
 import { User } from './user';
 
 export type findAllArgs = {
@@ -7,7 +7,7 @@ export type findAllArgs = {
 };
 
 export interface IUserRepository {
-  create(data: UserInput): Promise<User>;
+  create(data: UserInputModel): Promise<User>;
   findByEmail(email: string): Promise<User | null>;
   findById(id: number): Promise<User | null>;
   findAll(config: findAllArgs): Promise<User[]>;
