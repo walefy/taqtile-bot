@@ -1,7 +1,7 @@
 import { createMethodMiddlewareDecorator } from 'type-graphql';
 import { AuthenticationError } from '@core/error';
-import { TokenService } from '../../../services/token-service';
 import { AuthGuardContext } from '@graphql/server.context';
+import { TokenService } from '@core/security';
 
 export function AuthGuard() {
   return createMethodMiddlewareDecorator<AuthGuardContext>(async ({ context }, next) => {

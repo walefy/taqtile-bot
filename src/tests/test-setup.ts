@@ -1,5 +1,5 @@
 import { PrismaClient } from '@prisma/client';
-import { main } from '../src/server';
+import { main } from '../server';
 import { before, after } from 'mocha';
 import { ApolloServer } from 'apollo-server';
 

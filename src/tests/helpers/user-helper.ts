@@ -1,7 +1,7 @@
 import axios from 'axios';
 import { prisma } from '../test-setup';
 import { Prisma, User } from '@prisma/client';
-import { TokenService } from '../../src/services/token-service';
+import { TokenService } from '@core/security';
 
 type GetAllUserOptions = {
   ignoreAdmin?: boolean;

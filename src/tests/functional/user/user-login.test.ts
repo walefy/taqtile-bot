@@ -2,8 +2,8 @@ import { afterEach, describe, it } from 'mocha';
 import { prisma } from '../../test-setup';
 import { expect } from 'chai';
 import { TokenHelper } from '../../helpers/token-helper';
-import { TokenService } from '../../../src/services/token-service';
 import { UserHelper } from '../../helpers/user-helper';
+import { TokenService } from '@core/security';
 
 describe('Login user suite (functional)', () => {
   afterEach(async () => {

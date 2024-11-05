@@ -1,13 +1,15 @@
-import { PrismaClient } from '@prisma/client';
-import { Service } from 'typedi';
-import { findAllArgs, IUserRepository } from '../types/iuser-repository';
+import { dbClient } from '@data/db/config/db.client';
 import { UserInputModel, UserWithAddressModel } from '@domain/model';
+import { Service } from 'typedi';
+
+export type findAllArgs = {
+  page?: number;
+  pageLimit?: number;
+};
 
 @Service()
-export class UserRepository implements IUserRepository {
-  private readonly model = this.prismaClient.user;
-
-  constructor(private readonly prismaClient: PrismaClient) {}
+export class UserDbDataSource {
+  private readonly model = dbClient.user;
 
   create(data: UserInputModel): Promise<UserWithAddressModel> {
     return this.model.create({ data, include: { address: true } });

@@ -1,8 +1,8 @@
 import { describe, it, afterEach } from 'mocha';
 import { expect } from 'chai';
-import { PasswordService } from '../../../src/services/password-service';
 import { prisma } from '../../test-setup';
 import { UserHelper } from '../../helpers/user-helper';
+import { PasswordService } from '@core/security';
 
 describe('Create user suite (functional)', () => {
   afterEach(async () => {
