@@ -1,4 +1,4 @@
-import { AuthGuard } from 'decorators/auth-guard';
+import { AuthGuard } from '@graphql/decorators/auth-guard';
 import { AddressService } from 'services/address-service';
 import { Arg, Int, Mutation, Query, Resolver } from 'type-graphql';
 import { Service } from 'typedi';

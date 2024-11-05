@@ -1,7 +1,7 @@
 import { Arg, Mutation, Query, Resolver } from 'type-graphql';
 import { Service } from 'typedi';
 import { UserWithAddress } from './user.type';
-import { AuthGuard } from 'decorators/auth-guard';
+import { AuthGuard } from '@graphql/decorators/auth-guard';
 import { UserService } from 'services/user-service';
 import { UserInfoInput, UserInput, UsersInfoInput } from './user.input';
 import { Login } from './login.type';
