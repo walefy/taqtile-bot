@@ -1,8 +1,9 @@
+import { AddressModel, AddressModelWithoutUser } from '@domain/model';
 import { User } from '@graphql/modules/user/user.type';
 import { Field, Int, ObjectType } from 'type-graphql';
 
 @ObjectType()
-export abstract class BaseAddressModel {
+export abstract class AddressWithoutUser implements AddressModelWithoutUser {
   @Field(() => Int)
   id: number;
 
@@ -29,10 +30,7 @@ export abstract class BaseAddressModel {
 }
 
 @ObjectType()
-export class AddressModel extends BaseAddressModel {
+export class Address extends AddressWithoutUser implements AddressModel {
   @Field(() => User)
   user: User;
 }
-
-@ObjectType()
-export class AddressModelWithoutUser extends BaseAddressModel {}

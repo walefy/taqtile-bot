@@ -4,10 +4,9 @@ import { Service } from 'typedi';
 import { UserRepository } from '../repositories/user-repository';
 import { LoginUnauthorizedException } from '../exceptions/login-unauthorized';
 import { TokenService } from './token-service';
-import { UserWithAddress } from '../types/user';
 import { UserNotFoundException } from '../exceptions/user-not-found-exception';
 import { findAllArgs } from '../types/iuser-repository';
-import { LoginInputModel, LoginModel, UserInputModel } from '@domain/model';
+import { LoginInputModel, LoginModel, UserInputModel, UserWithAddressModel } from '@domain/model';
 
 @Service()
 export class UserService {
@@ -16,7 +15,7 @@ export class UserService {
     private readonly tokenService: TokenService,
   ) {}
 
-  async createUser(data: UserInputModel): Promise<UserWithAddress> {
+  async createUser(data: UserInputModel): Promise<UserWithAddressModel> {
     const userExists = await this.userRepository.findByEmail(data.email);
 
     if (userExists) {
@@ -47,7 +46,7 @@ export class UserService {
     return { user, token };
   }
 
-  async getUser(id: number): Promise<UserWithAddress> {
+  async getUser(id: number): Promise<UserWithAddressModel> {
     const user = await this.userRepository.findById(id);
 
     if (!user) {
@@ -57,7 +56,7 @@ export class UserService {
     return user;
   }
 
-  getAllUsers(config: findAllArgs): Promise<UserWithAddress[]> {
+  getAllUsers(config: findAllArgs): Promise<UserWithAddressModel[]> {
     return this.userRepository.findAll(config);
   }
 }

@@ -1,6 +1,6 @@
 import { UserModel } from '@domain/model';
-import { AddressModelWithoutUser } from 'dtos/models/address-model';
 import { Field, ObjectType } from 'type-graphql';
+import { AddressWithoutUser } from '@graphql/modules/common';
 
 @ObjectType()
 export class User implements UserModel {
@@ -20,6 +20,6 @@ export class User implements UserModel {
 // TODO: transferir AddressModelWithoutUser/AddressModel/etc para uma pasta common
 @ObjectType()
 export class UserWithAddress extends User {
-  @Field(() => [AddressModelWithoutUser])
-  address: AddressModelWithoutUser[];
+  @Field(() => [AddressWithoutUser])
+  address: AddressWithoutUser[];
 }

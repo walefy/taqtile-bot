@@ -1,7 +1,6 @@
 import { PrismaClient } from '@prisma/client';
 import { Service } from 'typedi';
-import { AddressInput } from '../dtos/inputs/address-input';
-import { Address } from '../types/address';
+import { AddressInputModel, AddressModel } from '@domain/model';
 
 @Service()
 export class AddressRepository {
@@ -9,18 +8,18 @@ export class AddressRepository {
 
   constructor(private readonly prismaClient: PrismaClient) {}
 
-  create(data: AddressInput): Promise<Address> {
+  create(data: AddressInputModel): Promise<AddressModel> {
     return this.model.create({ data, include: { user: true } });
   }
 
-  findByUserId(userId: number): Promise<Address[]> {
+  findByUserId(userId: number): Promise<AddressModel[]> {
     return this.model.findMany({
       where: { userId },
       include: { user: true },
     });
   }
 
-  findAll(): Promise<Address[]> {
+  findAll(): Promise<AddressModel[]> {
     return this.model.findMany({ include: { user: true } });
   }
 }

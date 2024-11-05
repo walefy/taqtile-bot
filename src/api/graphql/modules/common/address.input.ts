@@ -1,8 +1,9 @@
+import { AddressInputModel } from '@domain/model';
 import { Min } from 'class-validator';
 import { Field, InputType, Int } from 'type-graphql';
 
 @InputType()
-export class AddressInput {
+export class AddressInput implements AddressInputModel {
   @Field()
   street: string;
 

@@ -1,9 +1,8 @@
 import { Service } from 'typedi';
 import { AddressRepository } from '../repositories/address-repository';
-import { AddressInput } from '../dtos/inputs/address-input';
-import { AddressModel } from '../dtos/models/address-model';
 import { UserRepository } from '../repositories/user-repository';
 import { UserNotFoundException } from '../exceptions/user-not-found-exception';
+import { AddressInputModel, AddressModel } from '@domain/model';
 
 @Service()
 export class AddressService {
@@ -12,7 +11,7 @@ export class AddressService {
     private readonly userRepository: UserRepository,
   ) {}
 
-  async create(data: AddressInput): Promise<AddressModel> {
+  async create(data: AddressInputModel): Promise<AddressModel> {
     const user = await this.userRepository.findById(data.userId);
 
     if (!user) {
