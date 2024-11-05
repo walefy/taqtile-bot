@@ -1,12 +1,10 @@
-import { PrismaClient } from '@prisma/client';
 import { Service } from 'typedi';
 import { AddressInputModel, AddressModel } from '@domain/model';
+import { dbClient } from '@data/db/config/db.client';
 
 @Service()
-export class AddressRepository {
-  private readonly model = this.prismaClient.address;
-
-  constructor(private readonly prismaClient: PrismaClient) {}
+export class AddressDbDataSource {
+  private readonly model = dbClient.address;
 
   create(data: AddressInputModel): Promise<AddressModel> {
     return this.model.create({ data, include: { user: true } });
