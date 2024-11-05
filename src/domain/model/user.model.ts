@@ -1,3 +1,5 @@
+import { AddressModelWithoutUser } from './address.model';
+
 export interface UserInputModel {
   name: string;
   email: string;
@@ -19,4 +21,12 @@ export interface UserModel {
   name: string;
   email: string;
   birthDate: Date;
+}
+
+export interface UserWithPasswordModel extends UserModel {
+  password: string;
+}
+
+export interface UserWithAddressModel extends UserWithPasswordModel {
+  address: AddressModelWithoutUser[];
 }
