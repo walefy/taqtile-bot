@@ -1,6 +1,6 @@
 import { GraphQLError } from 'graphql';
 import { CustomError } from '@domain/error';
-import { ApolloError, toApolloError } from 'apollo-server';
+import { ApolloError, toApolloError } from 'apollo-server-express';
 import { ArgumentValidationError } from 'type-graphql';
 
 type ErrorAsType = {
