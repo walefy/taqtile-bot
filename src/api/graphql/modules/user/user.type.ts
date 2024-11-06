@@ -17,7 +17,6 @@ export class User implements UserModel {
   birthDate: Date;
 }
 
-// TODO: transferir AddressModelWithoutUser/AddressModel/etc para uma pasta common
 @ObjectType()
 export class UserWithAddress extends User {
   @Field(() => [AddressWithoutUser])
