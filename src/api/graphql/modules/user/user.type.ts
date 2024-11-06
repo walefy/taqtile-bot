@@ -1,4 +1,4 @@
-import { UserModel } from '@domain/model';
+import { UserModel, UserWithAddressModel } from '@domain/model';
 import { Field, ObjectType } from 'type-graphql';
 import { AddressWithoutUser } from '@graphql/modules/common';
 
@@ -18,7 +18,7 @@ export class User implements UserModel {
 }
 
 @ObjectType()
-export class UserWithAddress extends User {
+export class UserWithAddress extends User implements UserWithAddressModel {
   @Field(() => [AddressWithoutUser])
   address: AddressWithoutUser[];
 }

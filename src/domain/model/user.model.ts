@@ -27,6 +27,10 @@ export interface UserWithPasswordModel extends UserModel {
   password: string;
 }
 
-export interface UserWithAddressModel extends UserWithPasswordModel {
+export interface UserWithAddressAndPasswordModel extends UserWithPasswordModel {
+  address: AddressModelWithoutUser[];
+}
+
+export interface UserWithAddressModel extends UserModel {
   address: AddressModelWithoutUser[];
 }
