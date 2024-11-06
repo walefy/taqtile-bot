@@ -1,5 +1,5 @@
 import { Command } from '@core/contracts';
-import { LoginUnauthorizedError } from '@core/error';
+import { LoginUnauthorizedError } from '@domain/error';
 import { PasswordService, TokenService } from '@core/security';
 import { UserDbDataSource } from '@data/user/user.db.data-source';
 import { LoginInputModel, LoginModel } from '@domain/model';

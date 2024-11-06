@@ -1,5 +1,5 @@
 import { Command } from '@core/contracts';
-import { UserNotFoundError } from '@core/error';
+import { UserNotFoundError } from '@domain/error';
 import { AddressDbDataSource } from '@data/user/address.db.data-source';
 import { UserDbDataSource } from '@data/user/user.db.data-source';
 import { AddressModel } from '@domain/model';

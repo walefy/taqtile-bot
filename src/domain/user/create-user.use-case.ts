@@ -1,5 +1,5 @@
 import { Command } from '@core/contracts';
-import { UserAlreadyExistsError } from '@core/error';
+import { UserAlreadyExistsError } from '@domain/error';
 import { PasswordService } from '@core/security';
 import { UserDbDataSource } from '@data/user/user.db.data-source';
 import { UserInputModel, UserWithAddressAndPasswordModel } from '@domain/model';

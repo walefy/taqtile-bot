@@ -1,5 +1,5 @@
 import { GraphQLError } from 'graphql';
-import { CustomError } from '@core/error';
+import { CustomError } from '@domain/error';
 import { ApolloError, toApolloError } from 'apollo-server';
 import { ArgumentValidationError } from 'type-graphql';
 

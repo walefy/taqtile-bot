@@ -1,5 +1,5 @@
 import { createMethodMiddlewareDecorator } from 'type-graphql';
-import { AuthenticationError } from '@core/error';
+import { AuthenticationError } from '@domain/error';
 import { AuthGuardContext } from '@graphql/server.context';
 import { TokenService } from '@core/security';
 
