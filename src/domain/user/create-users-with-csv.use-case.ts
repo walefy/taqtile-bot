@@ -59,7 +59,7 @@ export class CreateUsersWithCsvUseCase implements Command<CreateUsersWithCsvUseC
 
     await this.addressDataSource.createMany(address);
 
-    return [];
+    return this.userDataSource.findByEmails(emails);
   }
 
   private async validateConstraintUniqueEmail(emails: string[]) {
