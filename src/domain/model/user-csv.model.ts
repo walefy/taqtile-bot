@@ -1,4 +1,4 @@
-export class UserCsvInputModel {
+export interface UserCsvInputModel {
   nome: string;
   email: string;
   'data de nascimento': Date;
@@ -11,16 +11,6 @@ export class UserCsvInputModel {
   complemento?: string;
 }
 
-export class UserCsvModel {
-  nome: string;
-  email: string;
-  'data de nascimento': Date;
-  zipCode: string;
-  cidade: string;
-  estado: string;
-  bairro: string;
-  rua: string;
-  'número da casa': number;
-  complemento?: string;
+export interface UserCsvModel extends UserCsvInputModel {
   password: string;
 }
