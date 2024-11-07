@@ -1,4 +1,4 @@
-import { AddressModelWithoutUser } from './address.model';
+import { AddressInputModel, AddressModelWithoutUser } from './address.model';
 
 export interface UserInputModel {
   name: string;
@@ -33,4 +33,9 @@ export interface UserWithAddressAndPasswordModel extends UserWithPasswordModel {
 
 export interface UserWithAddressModel extends UserModel {
   address: AddressModelWithoutUser[];
+}
+
+export interface UserReadyToSaveWithAddress {
+  user: UserInputModel;
+  address: AddressInputModel[];
 }

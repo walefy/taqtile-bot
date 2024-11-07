@@ -6,6 +6,9 @@ import { UserInfoInput, UserInput, UsersInfoInput } from './user.input';
 import { Login } from './login.type';
 import { LoginInput } from './login.input';
 import { CreateUserUseCase, GetAllUsersUseCase, GetUserUseCase, LoginUseCase } from '@domain/user';
+import { FileUpload, GraphQLUpload } from 'graphql-upload-ts';
+import { CreateUsersWithCsvUseCase } from '@domain/user/create-users-with-csv.use-case';
+import { UserCsvInput } from './user-csv.input';
 
 @Service()
 @Resolver()
@@ -15,12 +18,31 @@ export class UserResolver {
     private readonly loginUseCase: LoginUseCase,
     private readonly getUserUseCase: GetUserUseCase,
     private readonly getAllUsersUseCase: GetAllUsersUseCase,
+    private readonly createUsersWithCsvUseCase: CreateUsersWithCsvUseCase,
   ) {}
 
   @Mutation(() => UserWithAddress)
   @AuthGuard()
   createUser(@Arg('data') data: UserInput): Promise<UserWithAddress> {
     return this.createUserUseCase.execute(data);
+  }
+
+  @Mutation(() => String)
+  @AuthGuard()
+  async createUsersWithCsv(@Arg('file', () => GraphQLUpload) file: FileUpload): Promise<string> {
+    const fileModel = {
+      filename: file.filename,
+      mimetype: file.mimetype,
+      encoding: file.encoding,
+      readStream: file.createReadStream(),
+    };
+
+    await this.createUsersWithCsvUseCase.execute({
+      fileModel,
+      validatorClass: UserCsvInput,
+    });
+
+    return 'Users created';
   }
 
   @Mutation(() => Login)

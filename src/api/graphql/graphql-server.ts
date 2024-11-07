@@ -10,6 +10,7 @@ import { graphqlUploadExpress } from 'graphql-upload-ts';
 import Container from 'typedi';
 import express from 'express';
 import process from 'node:process';
+import cors from 'cors';
 
 export class GraphQLServer implements Runnable<Server> {
   async run(): Promise<Server> {
@@ -22,6 +23,7 @@ export class GraphQLServer implements Runnable<Server> {
     const app = express();
     const httpServer = createServer(app);
 
+    app.use(cors());
     app.use(express.json());
 
     const apolloServer = new ApolloServer({

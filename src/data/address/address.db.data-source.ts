@@ -10,6 +10,10 @@ export class AddressDbDataSource {
     return this.model.create({ data, include: { user: true } });
   }
 
+  async createMany(data: AddressInputModel[]): Promise<void> {
+    await this.model.createMany({ data });
+  }
+
   findByUserId(userId: number): Promise<AddressModel[]> {
     return this.model.findMany({
       where: { userId },
