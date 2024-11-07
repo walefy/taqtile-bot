@@ -5,7 +5,7 @@ import { InputModelValidationService } from '@core/validation/input-model-valida
 import { AddressDbDataSource } from '@data/address/address.db.data-source';
 import { UserDbDataSource } from '@data/user/user.db.data-source';
 import { InvalidFileError, UserAlreadyExistsError } from '@domain/error';
-import { FileModel, UserWithAddressModel, UserCsvModel, UserReadyToSaveWithAddress } from '@domain/model';
+import { FileModel, UserWithAddressModel, UserCsvModel, UserInputModel, AddressInputModel } from '@domain/model';
 import { Service } from 'typedi';
 
 export type CreateUsersWithCsvUseCaseProps = {
@@ -16,6 +16,11 @@ export type CreateUsersWithCsvUseCaseProps = {
 export type EmailWithRawPassword = {
   email: string;
   rawPassword: string;
+};
+
+export type UserReadyToSaveWithAddress = {
+  user: UserInputModel;
+  address: AddressInputModel[];
 };
 
 @Service()
@@ -62,7 +67,7 @@ export class CreateUsersWithCsvUseCase implements Command<CreateUsersWithCsvUseC
     return this.userDataSource.findByEmails(emails);
   }
 
-  private async validateConstraintUniqueEmail(emails: string[]) {
+  private async validateConstraintUniqueEmail(emails: string[]): Promise<void> {
     const usersFound = await this.userDataSource.findByEmails(emails);
 
     if (usersFound.length > 0) {
