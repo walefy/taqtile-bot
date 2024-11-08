@@ -75,5 +75,8 @@ describe('Create users with csv suite (functional)', () => {
       isEmail: 'email must be an email',
       isNotEmpty: 'email should not be empty',
     });
+
+    const users = await prisma.user.findMany();
+    expect(users).to.have.length(1);
   });
 });
