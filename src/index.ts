@@ -1,3 +1,4 @@
-import { main } from './server';
+import 'reflect-metadata';
+import { Server } from '@api/server';
 
-main();
+new Server().run();

@@ -4,12 +4,15 @@
   "description": "Este projeto contém um CRUD feito com graphql e typescript.",
   "main": "index.js",
   "scripts": {
-    "seeds": "prisma migrate deploy && prisma db seed",
-    "predev": "npx prisma migrate deploy",
-    "dev": "tsnd --transpile-only --ignore-watch node_modules src/index.ts",
+    "db:gen": "prisma generate --schema src/data/db/schema.prisma",
+    "migration:gen": "prisma migrate dev --schema src/data/db/schema.prisma",
+    "migration:deploy": "prisma migrate deploy --schema src/data/db/schema.prisma",
+    "seeds": "npm run migration:deploy && prisma db seed",
+    "predev": "npm run migration:deploy",
+    "dev": "tsnd --transpile-only --ignore-watch node_modules -r tsconfig-paths/register src/index.ts",
     "lint": "eslint .",
     "lint:fix": "eslint . --fix",
-    "pretest": "dotenv -e .env.example -- npx prisma migrate deploy",
+    "pretest": "dotenv -e .env.example -- npm run migration:deploy",
     "test": "dotenv -e .env.example -- mocha"
   },
   "keywords": [],
@@ -44,10 +47,11 @@
     "prisma": "5.20.0",
     "ts-node": "10.9.2",
     "ts-node-dev": "2.0.0",
+    "tsconfig-paths": "4.2.0",
     "typescript": "5.4",
     "typescript-eslint": "8.7.0"
   },
   "prisma": {
-    "seed": "ts-node --transpile-only ./prisma/seed.ts"
+    "seed": "ts-node --transpile-only -r tsconfig-paths/register ./src/data/db/seed.ts"
   }
 }

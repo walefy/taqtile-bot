@@ -9,6 +9,44 @@
     "strict": true,
     "skipLibCheck": true,
     "strictPropertyInitialization": false,
+    "baseUrl": "./src",
+    "paths": {
+      "@domain": [
+        "./domain"
+      ],
+      "@domain/*": [
+        "./domain/*"
+      ],
+      "@graphql": [
+        "./api/graphql"
+      ],
+      "@graphql/*": [
+        "./api/graphql/*"
+      ],
+      "@core": [
+        "./core"
+      ],
+      "@core/*": [
+        "./core/*"
+      ],
+      "@data": [
+        "./data"
+      ],
+      "@data/*": [
+        "./data/*"
+      ],
+      "@api": [
+        "./api"
+      ],
+      "@api/*": [
+        "./api/*"
+      ]
+    }
   },
-  "include": ["src/**/*"]
+  "include": ["src/**/*"],
+  "exclude": [
+    "node_modules",
+    "dist",
+    "*.test.ts",
+  ]
 }

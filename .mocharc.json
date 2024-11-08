@@ -4,15 +4,16 @@
   ],
   "require": [
     "ts-node/register",
+    "tsconfig-paths/register",
     "chai/register-expect.js"
   ],
   "file": [
-    "./tests/test-setup.ts"
+    "./src/tests/test-setup.ts"
   ],
   "watch-files": [
-    "tests/**/*.ts"
+    "src/tests/**/*.ts"
   ],
   "spec": [
-    "tests/**/*.test.ts"
+    "src/tests/**/*.test.ts"
   ]
 }
