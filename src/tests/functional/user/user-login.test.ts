@@ -10,7 +10,7 @@ describe('Login user suite (functional)', () => {
     await prisma.user.deleteMany();
   });
 
-  it('Test if login mutation can login an user', async () => {
+  it('should login a user with valid credentials', async () => {
     const token = await UserHelper.generateToken();
     await UserHelper.createUserWithApiCall(UserHelper.defaultUser, token);
     const loginPayload = { email: UserHelper.defaultUser.email, password: UserHelper.defaultUser.password };
@@ -29,7 +29,7 @@ describe('Login user suite (functional)', () => {
     expect(response.user.birthDate).to.be.equal(UserHelper.defaultUser.birthDate);
   });
 
-  it('Test if login mutation cant login an user with wrong password', async () => {
+  it('should not login a user with wrong password', async () => {
     const token = await UserHelper.generateToken();
     await UserHelper.createUserWithApiCall(UserHelper.defaultUser, token);
     const loginPayload = { email: UserHelper.defaultUser.email, password: 'wrongpassword' };
@@ -41,7 +41,7 @@ describe('Login user suite (functional)', () => {
     expect(response[0].message).to.be.equal('Login unauthorized!');
   });
 
-  it('Test if login mutation cant login an user with wrong email', async () => {
+  it('should not login a user with wrong email', async () => {
     const token = await UserHelper.generateToken();
     await UserHelper.createUserWithApiCall(UserHelper.defaultUser, token);
     const loginPayload = { email: 'wrongemail@email.com', password: UserHelper.defaultUser.password };
@@ -53,7 +53,7 @@ describe('Login user suite (functional)', () => {
     expect(response[0].message).to.be.equal('Login unauthorized!');
   });
 
-  it('Test if login mutation can generate a token with 1 day of expiration', async () => {
+  it('should generate a token with 1 day of expiration', async () => {
     const token = await UserHelper.generateToken();
     await UserHelper.createUserWithApiCall(UserHelper.defaultUser, token);
     const loginPayload = { email: UserHelper.defaultUser.email, password: UserHelper.defaultUser.password };
@@ -65,7 +65,7 @@ describe('Login user suite (functional)', () => {
     expect(TokenHelper.tokenExpirationInDays(payload.exp)).to.be.equal(1);
   });
 
-  it('Test if login mutation can login an user with rememberMe', async () => {
+  it('should login a user with rememberMe option', async () => {
     const token = await UserHelper.generateToken();
     await UserHelper.createUserWithApiCall(UserHelper.defaultUser, token);
     const loginPayload = {

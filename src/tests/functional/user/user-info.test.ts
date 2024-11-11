@@ -9,7 +9,7 @@ describe('Get user info suite (functional)', () => {
     await prisma.user.deleteMany();
   });
 
-  it('Test if user query returns the correct user', async () => {
+  it('should return the correct user', async () => {
     const token = await UserHelper.generateToken();
     const userCreation = await UserHelper.createUserWithDbCall(UserHelper.defaultUser);
     AddressHelper.createAddressWithDbCall({ ...AddressHelper.defaultAddress, userId: userCreation.id });
@@ -38,7 +38,7 @@ describe('Get user info suite (functional)', () => {
     expect(response.address[0].zipCode).to.be.equal(AddressHelper.defaultAddress.zipCode);
   });
 
-  it('Test if user query returns the correct user when the user does not have an address', async () => {
+  it('should return the correct user when the user does not have an address', async () => {
     const token = await UserHelper.generateToken();
     const userCreation = await UserHelper.createUserWithDbCall(UserHelper.defaultUser);
 
@@ -59,7 +59,7 @@ describe('Get user info suite (functional)', () => {
     expect(response.address).to.have.length(0);
   });
 
-  it('Test if user query returns an error when the user does not exist', async () => {
+  it('should return an error when the user does not exist', async () => {
     const token = await UserHelper.generateToken();
     const { errors: response } = await UserHelper.getUser(token, 1);
 
@@ -68,7 +68,7 @@ describe('Get user info suite (functional)', () => {
     expect(response[0].message).to.be.equal('User not found!');
   });
 
-  it('Test if user query returns an error when the token is invalid', async () => {
+  it('should return an error when the token is invalid', async () => {
     const { errors: response } = await UserHelper.getUser('', 1);
 
     expect(response).to.be.an('array');

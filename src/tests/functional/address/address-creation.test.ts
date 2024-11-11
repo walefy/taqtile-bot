@@ -10,7 +10,7 @@ describe('Create address suite (functional)', () => {
     await prisma.user.deleteMany();
   });
 
-  it('Test if createAddress mutation can create an address', async () => {
+  it('should create an address with createAddress mutation', async () => {
     const token = await UserHelper.generateToken();
     const user = await UserHelper.createUserWithDbCall(UserHelper.defaultUser);
 
@@ -49,7 +49,7 @@ describe('Create address suite (functional)', () => {
     expect(address!.userId).to.be.equal(response.user.id);
   });
 
-  it('Test if createAddress mutation can create two address for the same user', async () => {
+  it('should create two addresses for the same user with createAddress mutation', async () => {
     const token = await UserHelper.generateToken();
     const user = await UserHelper.createUserWithDbCall(UserHelper.defaultUser);
 
@@ -106,7 +106,7 @@ describe('Create address suite (functional)', () => {
     }
   });
 
-  it('Test if createAddress mutation cant create an address with a invalid token', async () => {
+  it('should not create an address with an invalid token using createAddress mutation', async () => {
     const { errors: response } = await AddressHelper.createAddress(1, '');
 
     expect(response).to.be.an('array');
@@ -115,7 +115,7 @@ describe('Create address suite (functional)', () => {
     expect(response[0].message).to.be.equal('Invalid or expired token');
   });
 
-  it('Test if createAddress mutation cant create an address with a invalid user', async () => {
+  it('should not create an address with an invalid user using createAddress mutation', async () => {
     const token = await UserHelper.generateToken();
     const { errors: response } = await AddressHelper.createAddress(9999, token);
 

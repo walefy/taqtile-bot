@@ -9,7 +9,7 @@ describe('Get all users info suite (functional)', () => {
     await prisma.user.deleteMany();
   });
 
-  it('Test if users query returns all users', async () => {
+  it('should return all users', async () => {
     const token = await UserHelper.generateToken();
 
     const users = Array.from({ length: 10 }, (_, i) => ({
@@ -51,7 +51,7 @@ describe('Get all users info suite (functional)', () => {
     }
   });
 
-  it('Test if users query returns all users with limit 5', async () => {
+  it('should return all users with limit 5', async () => {
     const token = await UserHelper.generateToken();
 
     const users = Array.from({ length: 10 }, (_, i) => ({
@@ -77,7 +77,7 @@ describe('Get all users info suite (functional)', () => {
     }
   });
 
-  it('Test if users query returns an error when the token is invalid', async () => {
+  it('should return an error when the token is invalid', async () => {
     const { errors: response } = await UserHelper.getAllUsers('');
 
     expect(response).to.be.an('array');
@@ -85,7 +85,7 @@ describe('Get all users info suite (functional)', () => {
     expect(response[0].message).to.be.equal('Invalid or expired token');
   });
 
-  it('Test if pagination is working correctly', async () => {
+  it('should paginate correctly', async () => {
     const token = await UserHelper.generateToken();
 
     const users = Array.from({ length: 6 }, (_, i) => ({
@@ -121,7 +121,7 @@ describe('Get all users info suite (functional)', () => {
     }
   });
 
-  it('Test if users query returns an error when pageLimit is negative', async () => {
+  it('should return an error when pageLimit is negative', async () => {
     const token = await UserHelper.generateToken();
     const paginationOptions = { page: 1, pageLimit: -1 };
     const { errors: response } = await UserHelper.getAllUsers(token, { paginationOptions });
@@ -140,7 +140,7 @@ describe('Get all users info suite (functional)', () => {
     expect(response[0].additionalInfo[0].constraints.min).to.be.equal('Page limit must be greater than 0');
   });
 
-  it('Test if users query returns an error when page is negative', async () => {
+  it('should return an error when page is negative', async () => {
     const token = await UserHelper.generateToken();
     const paginationOptions = { page: -1, pageLimit: 1 };
     const { errors: response } = await UserHelper.getAllUsers(token, { paginationOptions });
@@ -159,7 +159,7 @@ describe('Get all users info suite (functional)', () => {
     expect(response[0].additionalInfo[0].constraints.min).to.be.equal('Page must be greater than 0');
   });
 
-  it('Test if users query returns an empty array when page is greater than the number of pages', async () => {
+  it('should return an empty array when page is greater than the number of pages', async () => {
     const token = await UserHelper.generateToken();
 
     const users = Array.from({ length: 6 }, (_, i) => ({
@@ -177,7 +177,7 @@ describe('Get all users info suite (functional)', () => {
     expect(response).to.have.length(0);
   });
 
-  it('Test if users query returns all users when pageLimit is greater than the number of users', async () => {
+  it('should return all users when pageLimit is greater than the number of users', async () => {
     const token = await UserHelper.generateToken();
 
     const users = Array.from({ length: 5 }, (_, i) => ({
@@ -195,7 +195,7 @@ describe('Get all users info suite (functional)', () => {
     expect(response).to.have.length(6);
   });
 
-  it('Test if users query returns an empty array when there are no users', async () => {
+  it('should return an empty array when there are no users', async () => {
     const token = await UserHelper.generateToken();
     const { data: response } = await UserHelper.getAllUsers(token, { ignoreAdmin: true });
 
@@ -203,7 +203,7 @@ describe('Get all users info suite (functional)', () => {
     expect(response).to.have.length(0);
   });
 
-  it('Test if users query returns an empty array when there are no users with pageLimit 5 and page 1 ', async () => {
+  it('should return an empty array when there are no users with pageLimit 5 and page 1', async () => {
     const token = await UserHelper.generateToken();
     const paginationOptions = { page: 1, pageLimit: 5 };
     const { data: response } = await UserHelper.getAllUsers(token, { paginationOptions, ignoreAdmin: true });

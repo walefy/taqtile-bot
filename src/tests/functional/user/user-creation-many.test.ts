@@ -9,7 +9,7 @@ describe('Create users with csv suite (functional)', () => {
     await prisma.user.deleteMany();
   });
 
-  it('Test if createUsersWithCsv mutation can create many users', async () => {
+  it('should create many users with createUsersWithCsv mutation', async () => {
     const token = await UserHelper.generateToken();
     const csvUsers = fs.createReadStream('src/tests/fixtures/user/users-csv.csv', 'utf-8');
 
@@ -18,7 +18,7 @@ describe('Create users with csv suite (functional)', () => {
     expect(response).to.be.equal('Users created');
   });
 
-  it('Test whether the createUsersWithCsv mutation cannot create existing users', async () => {
+  it('should not create existing users with createUsersWithCsv mutation', async () => {
     const token = await UserHelper.generateToken();
     const csvUsers = fs.createReadStream('src/tests/fixtures/user/users-csv.csv', 'utf-8');
 
@@ -34,7 +34,7 @@ describe('Create users with csv suite (functional)', () => {
     expect(users).to.have.length(2);
   });
 
-  it('Test whether the createUsersWithCsv mutation cannot create users without csv', async () => {
+  it('should not create users without csv with createUsersWithCsv mutation', async () => {
     const token = await UserHelper.generateToken();
     const { errors: response } = await UserHelper.createUsersWithCsvApiCall(null, token);
 
@@ -44,7 +44,7 @@ describe('Create users with csv suite (functional)', () => {
     expect(response[0].message).to.be.equal('Variable "$file" of non-null type "Upload!" must not be null.');
   });
 
-  it('Test whether the createUsersWithCsv mutation cannot create users with invalid file format ', async () => {
+  it('should not create users with invalid file format with createUsersWithCsv mutation', async () => {
     const token = await UserHelper.generateToken();
     const csvUsers = fs.createReadStream('src/tests/fixtures/user/users-invalid-format.txt', 'utf-8');
 
@@ -55,7 +55,7 @@ describe('Create users with csv suite (functional)', () => {
     expect(response[0].message).to.be.equal('File uploaded with invalid format! Expect csv file.');
   });
 
-  it('Test whether the createUsersWithCsv mutation cannot create users with invalid file format ', async () => {
+  it('should not create users with invalid user data in csv with createUsersWithCsv mutation', async () => {
     const token = await UserHelper.generateToken();
     const csvUsers = fs.createReadStream('src/tests/fixtures/user/users-csv-invalid-user.csv', 'utf-8');
 
