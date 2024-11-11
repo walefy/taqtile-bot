@@ -1,11 +1,11 @@
 import { InputParseError } from '@domain/error/input-parse.error';
-import { validate } from 'class-validator';
+import { validate as classValidatorValidate } from 'class-validator';
 import { Service } from 'typedi';
 
 @Service()
 export class InputModelValidationService {
   async validate<T>(input: object): Promise<T> {
-    const validationErrors = await validate(input);
+    const validationErrors = await classValidatorValidate(input);
 
     if (validationErrors.length > 0) {
       const additionalInfo = [];
