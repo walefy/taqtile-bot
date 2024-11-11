@@ -1,6 +1,7 @@
 import { Command } from '@core/contracts';
 import { PasswordService } from '@core/security';
 import { CsvService } from '@core/security/csv/csv.service';
+import { BatchProcessor } from '@core/utility';
 import { InputModelValidationService } from '@core/validation/input-model-validation.service';
 import { AddressDbDataSource } from '@data/address/address.db.data-source';
 import { UserDbDataSource } from '@data/user/user.db.data-source';
@@ -41,15 +42,11 @@ export class CreateUsersWithCsvUseCase implements Command<CreateUsersWithCsvUseC
 
     const entryObjects = await this.csvService.toObject(data.readStream);
 
-    const usersReadyToSave = entryObjects.map(async (rawObj) => {
-      const { hashedPassword } = PasswordService.generateRandomPassword();
-      const userModel = await this.generateAValidUserCsvInstance(rawObj, validatorClass);
-      const userReadyToSave = await this.convertUserCsvToUserReadyToSave(hashedPassword, userModel);
-
-      return userReadyToSave;
-    });
-
-    const usersToRegister: UserReadyToSaveWithAddress[] = await Promise.all(usersReadyToSave);
+    const usersToRegister = await BatchProcessor.processInBatches<unknown, UserReadyToSaveWithAddress>(
+      entryObjects,
+      10,
+      (rawObj) => this.processRawUserEntry(rawObj, validatorClass),
+    );
 
     const emails = usersToRegister.map(({ user }) => user.email);
     await this.validateConstraintUniqueEmail(emails);
@@ -65,6 +62,17 @@ export class CreateUsersWithCsvUseCase implements Command<CreateUsersWithCsvUseC
     await this.addressDataSource.createMany(address);
 
     return this.userDataSource.findByEmails(emails);
+  }
+
+  private async processRawUserEntry(
+    rawObj: unknown,
+    validatorClass: new () => object,
+  ): Promise<UserReadyToSaveWithAddress> {
+    const { hashedPassword } = PasswordService.generateRandomPassword();
+    const userModel = await this.generateAValidUserCsvInstance(rawObj, validatorClass);
+    const userReadyToSave = await this.convertUserCsvToUserReadyToSave(hashedPassword, userModel);
+
+    return userReadyToSave;
   }
 
   private async validateConstraintUniqueEmail(emails: string[]): Promise<void> {
