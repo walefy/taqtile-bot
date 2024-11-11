@@ -1,6 +1,7 @@
+import { UserCsvInputModel } from '@domain/model';
 import { IsNotEmpty, IsString, IsEmail, IsOptional, IsDateString, IsNumberString } from 'class-validator';
 
-export class UserCsvInput implements UserCsvInput {
+export class UserCsvInput implements UserCsvInputModel {
   @IsNotEmpty()
   @IsString()
   nome: string;
@@ -33,7 +34,7 @@ export class UserCsvInput implements UserCsvInput {
   rua: string;
 
   @IsNumberString()
-  'número da casa': number;
+  'número da casa': string;
 
   @IsOptional()
   @IsString()
