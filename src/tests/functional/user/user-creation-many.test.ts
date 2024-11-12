@@ -1,21 +1,36 @@
+import fs from 'node:fs';
+import sinon from 'sinon';
 import { describe, it, afterEach } from 'mocha';
 import { expect } from 'chai';
 import { prisma } from '../../test-setup';
 import { UserHelper } from '../../helpers/user-helper';
-import fs from 'node:fs';
+import { ResendEmailService } from '@core/email';
 
 describe('Create users with csv suite (functional)', () => {
   afterEach(async () => {
     await prisma.user.deleteMany();
+    sinon.restore();
   });
 
   it('should create many users with createUsersWithCsv mutation', async () => {
+    sinon.stub(ResendEmailService.prototype as never, 'delay').resolves();
+    const sendMailThroughResendStub = sinon
+      .stub(ResendEmailService.prototype as never, 'sendMailThroughResend')
+      .resolves();
+    const sendMailSpy = sinon.spy(ResendEmailService.prototype, 'sendMail');
+
     const token = await UserHelper.generateToken();
     const csvUsers = fs.createReadStream('src/tests/fixtures/user/users-csv.csv', 'utf-8');
 
     const { data: response } = await UserHelper.createUsersWithCsvApiCall(csvUsers, token);
 
     expect(response).to.be.equal('Users created');
+
+    const users = await prisma.user.findMany();
+
+    expect(users).to.have.length(6);
+    expect(sendMailSpy.callCount).to.be.equal(5);
+    expect(sendMailThroughResendStub.callCount).to.be.equal(5);
   });
 
   it('should not create existing users with createUsersWithCsv mutation', async () => {

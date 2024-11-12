@@ -13,7 +13,7 @@ export class CsvService {
       });
 
       fileStream.on('end', () => {
-        parse(data, {
+        parse(data.trim(), {
           header: true,
           complete: (results) => resolve(results.data),
           error: (error: unknown) => reject(error),
