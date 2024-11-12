@@ -9,7 +9,7 @@ describe('Create user suite (functional)', () => {
     await prisma.user.deleteMany();
   });
 
-  it('Test if createUser mutation can create an user', async () => {
+  it('should create a user with createUser mutation', async () => {
     const token = await UserHelper.generateToken();
     const { data: response } = await UserHelper.createUserWithApiCall(UserHelper.defaultUser, token);
     const user = await prisma.user.findUnique({ where: { id: response.id }, include: { address: true } });
@@ -34,7 +34,7 @@ describe('Create user suite (functional)', () => {
     expect(response.birthDate).to.be.equal(UserHelper.defaultUser.birthDate);
   });
 
-  it('Test if createUser mutation can create an user without address', async () => {
+  it('should create a user without address with createUser mutation', async () => {
     const token = await UserHelper.generateToken();
     const { data: response } = await UserHelper.createUserWithApiCall(UserHelper.defaultUser, token);
 
@@ -63,7 +63,7 @@ describe('Create user suite (functional)', () => {
     expect(response.birthDate).to.be.equal(UserHelper.defaultUser.birthDate);
   });
 
-  it('Test if createUser mutation cant create an user with the same email', async () => {
+  it('should not create a user with the same email with createUser mutation', async () => {
     const token = await UserHelper.generateToken();
 
     await UserHelper.createUserWithDbCall(UserHelper.defaultUser);
@@ -75,7 +75,7 @@ describe('Create user suite (functional)', () => {
     expect(response[0].message).to.be.equal('User already exists!');
   });
 
-  it('Test if createUser mutation cant create an user with a invalid token', async () => {
+  it('should not create a user with an invalid token with createUser mutation', async () => {
     const { errors: response } = await UserHelper.createUserWithApiCall(UserHelper.defaultUser, '');
 
     expect(response).to.be.an('array');
@@ -84,7 +84,7 @@ describe('Create user suite (functional)', () => {
     expect(response[0].message).to.be.equal('Invalid or expired token');
   });
 
-  it('Test if createUser mutation cant create an user without a token', async () => {
+  it('should not create a user without a token with createUser mutation', async () => {
     const { errors: response } = await UserHelper.createUserWithApiCall(UserHelper.defaultUser, null, false);
 
     expect(response).to.be.an('array');

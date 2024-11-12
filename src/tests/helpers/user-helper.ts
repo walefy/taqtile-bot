@@ -2,6 +2,8 @@ import axios from 'axios';
 import { prisma } from '../test-setup';
 import { Prisma, User } from '@prisma/client';
 import { TokenService } from '@core/security';
+import { ReadStream } from 'node:fs';
+import FormData from 'form-data';
 
 type GetAllUserOptions = {
   ignoreAdmin?: boolean;
@@ -51,6 +53,50 @@ export class UserHelper {
     });
 
     return { data: response.data.data?.createUser, errors: response.data.errors };
+  }
+
+  public static async createUsersWithCsvApiCall(file: ReadStream | null, token: string | null, addBearer = true) {
+    const tokenString = addBearer ? `Bearer ${token}` : token;
+
+    if (!file) {
+      const response = await axios({
+        url: 'http://localhost:4000',
+        method: 'post',
+        headers: { Authorization: tokenString },
+        validateStatus: () => true,
+        data: {
+          query: 'mutation CreateUsersWithCsv($file: Upload!) { createUsersWithCsv(file: $file) }',
+          variables: { file },
+        },
+      });
+
+      return { data: response.data.data?.createUsersWithCsv, errors: response.data.errors };
+    }
+
+    const formData = new FormData();
+
+    formData.append(
+      'operations',
+      JSON.stringify({
+        query: 'mutation CreateUsersWithCsv($file: Upload!) { createUsersWithCsv(file: $file) }',
+        variables: { file: null },
+      }),
+    );
+
+    formData.append('map', '{"0": ["variables.file"]}');
+    formData.append('0', file);
+
+    const response = await axios({
+      url: 'http://localhost:4000',
+      method: 'post',
+      data: formData,
+      headers: {
+        ...formData.getHeaders(),
+        Authorization: tokenString,
+      },
+    });
+
+    return { data: response.data.data?.createUsersWithCsv, errors: response.data.errors };
   }
 
   public static async createUserWithDbCall(data: Prisma.UserCreateInput) {

@@ -1,6 +1,6 @@
 import { Command } from '@core/contracts';
 import { UserNotFoundError } from '@domain/error';
-import { AddressDbDataSource } from '@data/user/address.db.data-source';
+import { AddressDbDataSource } from '@data/address/address.db.data-source';
 import { UserDbDataSource } from '@data/user/user.db.data-source';
 import { AddressInputModel, AddressModel } from '@domain/model';
 import { Service } from 'typedi';

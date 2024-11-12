@@ -15,8 +15,19 @@ export class UserDbDataSource {
     return this.model.create({ data, include: { address: true } });
   }
 
+  async createMany(data: UserInputModel[]): Promise<UserWithAddressAndPasswordModel[]> {
+    await this.model.createMany({ data });
+
+    const emails = data.map(({ email }) => email);
+    return this.findByEmails(emails);
+  }
+
   findByEmail(email: string): Promise<UserWithAddressAndPasswordModel | null> {
     return this.model.findFirst({ where: { email }, include: { address: true } });
+  }
+
+  findByEmails(emails: string[]): Promise<UserWithAddressAndPasswordModel[]> {
+    return this.model.findMany({ where: { email: { in: emails } }, include: { address: true } });
   }
 
   findById(id: number): Promise<UserWithAddressAndPasswordModel | null> {

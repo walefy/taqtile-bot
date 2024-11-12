@@ -1,10 +1,10 @@
 import 'reflect-metadata';
 import { PrismaClient } from '@prisma/client';
 import { before, after } from 'mocha';
-import { ApolloServer } from 'apollo-server';
 import { GraphQLServer } from '@graphql';
+import { Server } from 'node:http';
 
-let server: ApolloServer;
+let server: Server;
 export const prisma = new PrismaClient();
 const graphqlServer = new GraphQLServer();
 
@@ -16,6 +16,7 @@ before(async () => {
 
 after(async () => {
   console.log('Stopping server...');
-  await server.stop();
-  await prisma.$disconnect();
+  server.close(async () => {
+    await prisma.$disconnect();
+  });
 });

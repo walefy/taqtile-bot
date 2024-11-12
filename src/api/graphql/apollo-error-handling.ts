@@ -1,6 +1,6 @@
 import { GraphQLError } from 'graphql';
 import { CustomError } from '@domain/error';
-import { ApolloError, toApolloError } from 'apollo-server';
+import { ApolloError, toApolloError, UserInputError } from 'apollo-server-express';
 import { ArgumentValidationError } from 'type-graphql';
 
 type ErrorAsType = {
@@ -11,6 +11,11 @@ type ErrorAsType = {
 
 export function apolloErrorHandling(error: GraphQLError): ErrorAsType | Error {
   const { originalError } = error;
+
+  if (error instanceof UserInputError) {
+    const { message } = error;
+    return { code: 400, message };
+  }
 
   if (originalError instanceof CustomError) {
     const { code, message, additionalInfo } = originalError;
