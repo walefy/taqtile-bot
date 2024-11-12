@@ -1,10 +1,12 @@
 import { Command } from '@core/contracts';
+import { ResendEmailService } from '@core/email';
 import { PasswordService } from '@core/security';
 import { CsvService } from '@core/security/csv/csv.service';
 import { BatchProcessor } from '@core/utility';
-import { InputModelValidationService } from '@core/validation/input-model-validation.service';
+import { InputModelValidationService } from '@core/validation';
 import { AddressDbDataSource } from '@data/address/address.db.data-source';
 import { UserDbDataSource } from '@data/user/user.db.data-source';
+import { EmailTemplates } from '@domain/email';
 import { InvalidFileError, UserAlreadyExistsError } from '@domain/error';
 import { FileModel, UserWithAddressModel, UserCsvModel, UserInputModel, AddressInputModel } from '@domain/model';
 import { Service } from 'typedi';
@@ -31,6 +33,7 @@ export class CreateUsersWithCsvUseCase implements Command<CreateUsersWithCsvUseC
     private readonly addressDataSource: AddressDbDataSource,
     private readonly csvService: CsvService,
     private readonly validationService: InputModelValidationService,
+    private readonly mailService: ResendEmailService,
   ) {}
 
   async execute(props: CreateUsersWithCsvUseCaseProps): Promise<UserWithAddressModel[]> {
@@ -68,9 +71,20 @@ export class CreateUsersWithCsvUseCase implements Command<CreateUsersWithCsvUseC
     rawObj: unknown,
     validatorClass: new () => object,
   ): Promise<UserReadyToSaveWithAddress> {
-    const { hashedPassword } = PasswordService.generateRandomPassword();
+    const { hashedPassword, rawPassword } = PasswordService.generateRandomPassword();
     const userModel = await this.generateAValidUserCsvInstance(rawObj, validatorClass);
     const userReadyToSave = await this.convertUserCsvToUserReadyToSave(hashedPassword, userModel);
+
+    this.mailService.sendMail({
+      to: userReadyToSave.user.email,
+      subject: 'Welcome to InstaqBot',
+      template: EmailTemplates.CreatedUsersWithCsv,
+      variables: {
+        name: userReadyToSave.user.name,
+        email: userReadyToSave.user.email,
+        password: rawPassword,
+      },
+    });
 
     return userReadyToSave;
   }
